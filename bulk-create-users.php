@@ -37,6 +37,7 @@ final class Bulk_Create_Users {
 	 * @since 1.0.0
 	 *
 	 * @uses Bulk_Create_Users::setup_globals()
+	 * @uses Bulk_Create_Users::includes()
 	 * @uses Bulk_Create_Users::setup_actions()
 	 * @return The single Bulk_Create_Users
 	 */
@@ -113,7 +114,7 @@ final class Bulk_Create_Users {
 		add_action( 'network_admin_menu', array( $this, 'admin_menu' ) );
 
 		// After user creation
-		add_action( 'bulk_create_users_user_created', array( $this, 'register_user_for_sites' ), 10, 1 ); // Only expect the first argument
+		add_action( 'bulk_create_users_user_created', array( $this, 'register_user_for_sites' ), 10, 1 ); // Only pass the first argument
 		add_action( 'bulk_create_users_user_created', array( $this, 'send_registration_email' ), 10, 2 );
 		add_action( 'bulk_create_users_user_created', array( $this, 'store_user_password'     ), 10, 2 );
 	}
@@ -124,6 +125,10 @@ final class Bulk_Create_Users {
 	 * Shortcut for returning the given plugin option
 	 *
 	 * @since 1.0.0
+	 *
+	 * @uses get_current_user_id()
+	 * @uses get_user_meta()
+	 * @uses delete_user_meta()
 	 * 
 	 * @param string $option Option name
 	 * @param bool $delete Whether to delete the option immediately after getting it
@@ -142,6 +147,8 @@ final class Bulk_Create_Users {
 	 * Shortcut for updating the given plugin option
 	 *
 	 * @since 1.0.0
+	 *
+	 * @uses update_user_meta()
 	 * 
 	 * @param string $option Option name
 	 * @param mixed $value New value
@@ -155,6 +162,8 @@ final class Bulk_Create_Users {
 	 * Shortcut for deleting the given plugin option
 	 *
 	 * @since 1.0.0
+	 *
+	 * @uses delete_user_meta()
 	 * 
 	 * @param string $option Option name
 	 * @return bool Deletion result
@@ -199,14 +208,11 @@ final class Bulk_Create_Users {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @uses current_user_can()
-	 * @uses wp_die()
-	 * @uses add_query_arg()
-	 * @uses admin_url()
-	 * @uses wp_redirect()
-	 * @uses update_user_meta()
-	 * @uses get_user_meta()
-	 * @uses delete_user_meta()
+	 * @uses Bulk_Create_Users::update_option()
+	 * @uses Bulk_Create_Users::get_option()
+	 * @uses Bulk_Create_Users::delete_option()
+	 * @uses Bulk_Create_Users::generate_login_from_email()
+	 * @uses Bulk_Create_Users::register_new_user()
 	 */
 	public function load_admin_page() {
 
@@ -504,12 +510,12 @@ final class Bulk_Create_Users {
 				exit;
 			}
 
-			// Remove all created users from the db
+			// Remove all created users
 			foreach ( wp_parse_id_list( $_REQUEST['user_ids'] ) as $user_id ) {
 				is_multisite() ? wpmu_delete_user( $user_id ) : wp_delete_user( $user_id );
 			}
 
-			// Set feedback message
+			// Register feedback message
 			$this->update_option( '_bulk_create_users_import_error', new WP_Error( 'removed_users', '', array( 'type' => 'success' ) ) );
 
 			// Redirect
@@ -949,6 +955,7 @@ final class Bulk_Create_Users {
 	 * 
 	 * @param string $code Message code
 	 * @param string $type Messege type. Either 'error', 'success' or 'info'. Defaults to 'info'
+	 * @return string Feedback message element
 	 */
 	public function get_feedback_message( $code = 0, $type = 'error' ) {
 
@@ -959,8 +966,8 @@ final class Bulk_Create_Users {
 
 		// Setup messages
 		$messages = array(
-			'info'    => apply_filters( 'bulk_create_users_info_messages',    array() ),
-			'error'   => apply_filters( 'bulk_create_users_error_messages',   array(
+			'info'    => apply_filters( 'bulk_create_users_info_messages', array() ),
+			'error'   => apply_filters( 'bulk_create_users_error_messages', array(
 				'no_file_found'         => __( 'Sorry, we could not find your file.', 'bulk-create-users' ),
 				'unreadable_file'       => __( 'Sorry, we could not read the uploaded file.', 'bulk-create-users' ),
 				'invalid_single_column' => __( 'Sorry, we can only proces single column files if it contains email addresses.', 'bulk-create-users' ),
@@ -1020,6 +1027,8 @@ final class Bulk_Create_Users {
 	 * dedicated post-user-creation hook with the user ID and user password.
 	 *
 	 * @since 1.0.0
+	 *
+	 * @see register_new_user()
 	 * 
 	 * @param string $user_login User login name
 	 * @param string $user_email User email address

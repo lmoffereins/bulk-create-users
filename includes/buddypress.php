@@ -22,6 +22,8 @@ final class Bulk_Create_Users_Buddypress {
 	 * Class constructor
 	 *
 	 * @since 1.0.0
+	 *
+	 * @uses Bulk_Create_Users_Buddypress::setup_actions()
 	 */
 	public function __construct() {
 		$this->setup_actions();
@@ -50,28 +52,32 @@ final class Bulk_Create_Users_Buddypress {
 	 * Add Buddypress destination fields to the data options
 	 *
 	 * @since 1.0.0
+	 *
+	 * @uses bp_is_active()
+	 * @uses bp_xprofile_get_groups()
+	 * @uses groups_get_groups()
 	 * 
-	 * @param array $dest Destinations
-	 * @return Destinations
+	 * @param array $fields Data fields
+	 * @return array Data fields
 	 */
-	public function data_fields( $dest ) {
+	public function data_fields( $fields ) {
 
 		// XProfile Component
 		if ( bp_is_active( 'xprofile' ) ) {
 
-			// Get all xprofile groups and fields
+			// Get all field groups with their fields
 			$xprofile = bp_xprofile_get_groups( array( 'fetch_fields' => true, 'hide_empty_groups' => true ) );
 
 			// Setup options array
 			$options  = array();
-			foreach ( $xprofile as $xp_group ) {
-				foreach ( $xp_group->fields as $field ) {
-					$options[ $field->id ] = "{$field->name} ({$xp_group->name})";
+			foreach ( $xprofile as $field_group ) {
+				foreach ( $field_group->fields as $field ) {
+					$options[ $field->id ] = "{$field->name} ({$field_group->name})";
 				}
 			}
 
 			// Append XProfile options
-			$dest['bp-xprofile'] = array(
+			$fields['bp-xprofile'] = array(
 				'label'   => __( 'Buddpress XProfile', 'bulk-create-users' ),
 				'options' => $options,
 			);
@@ -90,13 +96,13 @@ final class Bulk_Create_Users_Buddypress {
 			}
 
 			// Append Groups options
-			$dest['bp-groups'] = array(
+			$fields['bp-groups'] = array(
 				'label'   => __( 'Buddypress Goups', 'bulk-create-users' ),
 				'options' => $options,
 			);
 		}
 
-		return $dest;
+		return $fields;
 	}
 
 	/**
@@ -118,6 +124,12 @@ final class Bulk_Create_Users_Buddypress {
 	 * Handle logic of saving data to Buddypress Groups fields
 	 *
 	 * @since 1.0.0
+	 *
+	 * @uses groups_get_groups()
+	 * @uses groups_join_group()
+	 * @uses groups_get_group()
+	 * @uses bool_from_yn()
+	 * @uses groups_leave_group()
 	 * 
 	 * @param string $field Field destination
 	 * @param int $user_id User ID
@@ -153,7 +165,7 @@ final class Bulk_Create_Users_Buddypress {
 }
 
 /**
- * Setup Buddypress extension class on 'bp_loaded'
+ * Setup Buddypress extension class on 'bp_loaded' action
  *
  * @since 1.0.0
  * 
