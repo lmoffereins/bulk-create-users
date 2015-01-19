@@ -9,7 +9,7 @@
 
 /**
  * Plugin Name:       Bulk Create Users
- * Description:       Create multiple users at once 
+ * Description:       Create/import/update multiple users at once 
  * Plugin URI:        https://github.com/lmoffereins/bulk-create-users/
  * Version:           1.0.0
  * Author:            Laurens Offereins
@@ -292,6 +292,7 @@ final class Bulk_Create_Users {
 						}
 					}
 
+					// Close the file
 					fclose( $file );
 
 					// Temporarily store the file data for the current user
@@ -477,7 +478,9 @@ final class Bulk_Create_Users {
 
 							// Update user meta
 							case 'usermeta' :
-								update_user_meta( $user_id, $field->field, $value );
+
+								// Use column title as meta key or use the map's field
+								update_user_meta( $user_id, ( 'usermeta' == $field->field ) ? $file_columns[ $col ] : $field->field, $value );
 								break;
 
 							// Provide custom field saving
@@ -634,7 +637,7 @@ final class Bulk_Create_Users {
 					if ( ! empty( $created_errors ) ) : ?>
 
 				<style>.widefat .notice { -webkit-box-shadow: none; box-shadow: none; }</style>
-				<table class="widefat">
+				<table class="widefat striped fixed">
 					<thead>
 						<tr>
 							<th scope="col"><?php _e( 'Row number',       'bulk-create-users' ); ?></th>
@@ -697,11 +700,11 @@ final class Bulk_Create_Users {
 
 					<?php // Map columns for multi-column files ?>
 					<?php if ( ! $single ) : $field_options = $this->field_options(); ?>
-					<table class="widefat">
+					<table class="widefat striped fixed">
 						<thead>
 							<tr>
-								<th scope="col"><?php _e( 'File Column',  'bulk-create-users' ); ?></th>
-								<th scope="col"><?php _e( 'Map To Field', 'bulk-create-users' ); ?></th>
+								<th scope="col"><?php _e( 'File Column', 'bulk-create-users' ); ?></th>
+								<th scope="col"><?php _e( 'Data Field',  'bulk-create-users' ); ?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -772,7 +775,7 @@ final class Bulk_Create_Users {
 							<td>
 								<input type="checkbox" name="registration-email" value="1" id="registration-email" />
 								<label for="registration-email"><?php _e( 'On user creation, send the new user a registration notification email.', 'bulk-create-users' ); ?></label>
-								<p class="description"><?php _e( 'This is the default WordPress registration notification email, containing only the login credentials.', 'bulk-create-users' ); ?></p>
+								<p class="description"><?php _e( 'This is the default WordPress registration notification email, containing the login credentials.', 'bulk-create-users' ); ?></p>
 							</td>
 						</tr>
 					</table>
@@ -813,6 +816,7 @@ final class Bulk_Create_Users {
 			<style>
 				.wrap .spinner { float: none; vertical-align: middle; }
 				.wrap.loading .spinner { display: inline-block; }
+				.widefat tbody th:after { font-family: 'Dashicons'; font-size: 18px; content: '\f345'; float: right; }
 			</style>
 			<script>
 				jQuery( '.wrap form' ).on( 'submit', function() {
@@ -880,23 +884,25 @@ final class Bulk_Create_Users {
 			'users' => array(
 				'label'   => __( 'Base Data', 'bulk-create-users' ),
 				'options' => array(
-					'user_email'      => __( 'Email Address',   'bulk-create-users' ) . '*', // Key
-					'user_login'      => __( 'Login',           'bulk-create-users' ),
-					'user_pass'       => __( 'Password',        'bulk-create-users' ),
-					'user_nicename'   => __( 'Nicename',        'bulk-create-users' ),
-					'user_url'        => __( 'Website',         'bulk-create-users' ),
-					'first_name'      => __( 'First Name',      'bulk-create-users' ),
-					'last_name'       => __( 'Last Name',       'bulk-create-users' ),
-					'display_name'    => __( 'Display Name',    'bulk-create-users' ),
-					'nickname'        => __( 'Nickname',        'bulk-create-users' ),
-					'description'     => __( 'Description',     'bulk-create-users' ),
+					'user_email'      => __( 'Email Address',           'bulk-create-users' ) . '*', // Key
+					'user_login'      => __( 'Login',                   'bulk-create-users' ),
+					'user_pass'       => __( 'Password',                'bulk-create-users' ),
+					'user_nicename'   => __( 'Nicename',                'bulk-create-users' ),
+					'user_url'        => __( 'Website',                 'bulk-create-users' ),
+					'first_name'      => __( 'First Name',              'bulk-create-users' ),
+					'last_name'       => __( 'Last Name',               'bulk-create-users' ),
+					'display_name'    => __( 'Display Name',            'bulk-create-users' ),
+					'nickname'        => __( 'Nickname',                'bulk-create-users' ),
+					'description'     => __( 'Description',             'bulk-create-users' ),
 				)
 			),
 
 			// User meta fields
 			'usermeta' => array(
 				'label'   => __( 'User Meta', 'bulk-create-users' ),
-				'options' => apply_filters( 'bulk_create_users_data_fields_usermeta', array() )
+				'options' => array(
+					'usermeta'        => __( 'Use column title as meta key', 'bulk-create-users' ),
+				)
 			),
 		) );
 	}
@@ -918,7 +924,7 @@ final class Bulk_Create_Users {
 		if ( $error = $this->get_option( '_bulk_create_users_import_error', true ) ) {
 
 			// Using a WP_Error object
-			if ( is_a( $error, 'WP_Error' ) ) {
+			if ( is_wp_error( $error ) ) {
 
 				// Fetch the error type
 				if ( ( $data = $error->get_error_data( $error->get_error_code() ) ) && isset( $data['type'] ) ) {
@@ -1098,15 +1104,15 @@ final class Bulk_Create_Users {
 
 		// Setup sites variable
 		if ( empty( $sites ) && ! empty( $_REQUEST['register-sites'] ) ) {
-			$sites = array_map( 'intval', $_REQUEST['register-sites'] );
-		}
+			$sites = $_REQUEST['register-sites'];
+		} 
 
 		// Bail when not doing multisite or no sites were given
 		if ( ! is_multisite() || empty( $sites ) )
 			return;
 
 		// Walk the given sites
-		foreach ( $sites as $site_id ) {
+		foreach ( array_map( 'intval', $sites ) as $site_id ) {
 
 			// User was first registered on the main site
 			if ( is_main_site( $site_id ) )
