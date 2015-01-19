@@ -443,6 +443,10 @@ final class Bulk_Create_Users {
 					// User already exists and not overwriting: next!
 					} elseif ( $user_id && ! $overwrite ) {
 						continue;
+
+					// Updating this user
+					} else {
+						$updated_users[] = $user_id;
 					}
 
 					// Update base user data
