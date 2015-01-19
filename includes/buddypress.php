@@ -173,7 +173,7 @@ final class Bulk_Create_Users_Buddypress {
  * @return Bulk_Create_Users_Buddypress
  */
 function bulk_create_users_buddypress() {
-	bulk_create_users()->buddypress = new Bulk_Create_Users_Buddypress;
+	bulk_create_users()->extend->buddypress = new Bulk_Create_Users_Buddypress;
 }
 add_action( 'bp_loaded', 'bulk_create_users_buddypress' );
 
