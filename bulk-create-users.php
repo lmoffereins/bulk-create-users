@@ -888,16 +888,16 @@ final class Bulk_Create_Users {
 			'users' => array(
 				'label'   => __( 'Base Data', 'bulk-create-users' ),
 				'options' => array(
-					'user_email'      => __( 'Email Address',           'bulk-create-users' ) . '*', // Key
-					'user_login'      => __( 'Login',                   'bulk-create-users' ),
-					'user_pass'       => __( 'Password',                'bulk-create-users' ),
-					'user_nicename'   => __( 'Nicename',                'bulk-create-users' ),
-					'user_url'        => __( 'Website',                 'bulk-create-users' ),
-					'first_name'      => __( 'First Name',              'bulk-create-users' ),
-					'last_name'       => __( 'Last Name',               'bulk-create-users' ),
-					'display_name'    => __( 'Display Name',            'bulk-create-users' ),
-					'nickname'        => __( 'Nickname',                'bulk-create-users' ),
-					'description'     => __( 'Description',             'bulk-create-users' ),
+					'user_email'      => __( 'Email Address', 'bulk-create-users' ) . '*', // Key
+					'user_login'      => __( 'Login',         'bulk-create-users' ),
+					'user_pass'       => __( 'Password',      'bulk-create-users' ),
+					'user_nicename'   => __( 'Nicename',      'bulk-create-users' ),
+					'user_url'        => __( 'Website',       'bulk-create-users' ),
+					'first_name'      => __( 'First Name',    'bulk-create-users' ),
+					'last_name'       => __( 'Last Name',     'bulk-create-users' ),
+					'display_name'    => __( 'Display Name',  'bulk-create-users' ),
+					'nickname'        => __( 'Nickname',      'bulk-create-users' ),
+					'description'     => __( 'Description',   'bulk-create-users' ),
 				)
 			),
 

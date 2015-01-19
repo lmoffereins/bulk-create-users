@@ -27,5 +27,9 @@ This plugin has out of the box support for Buddypress XProfile fields and User G
 
 == Changelog ==
 
+= 1.0.1 =
+* Fixed collecting updated users
+* Added using column titles as user meta keys
+
 = 1.0.0 =
 * Initial release
