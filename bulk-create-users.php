@@ -316,9 +316,10 @@ final class Bulk_Create_Users {
 			// Get uploaded file data
 			$file_data = $this->get_option( '_bulk_create_users_uploaded_file_data' );
 
-			// Read form data
-			$overwrite = ! empty( $_REQUEST['update-existing'] );
+			// Fetch import settings
+			$first_row = ! empty( $_REQUEST['first-row'] );
 			$sites     = is_multisite() && ! empty( $_REQUEST['register-sites'] ) ? $_REQUEST['register-sites'] : array();
+			$overwrite = ! empty( $_REQUEST['update-existing'] );
 
 			/**
 			 * The following logic is placed in a one-run do-while loop so 
@@ -338,7 +339,20 @@ final class Bulk_Create_Users {
 				$file_rows    = $file_data['rows'];
 
 				// Define whether we're processing a single column file
-				$single = 1 == count( $file_columns );
+				$single = ( 1 == count( $file_columns ) );
+
+				// Consider the first data row
+				if ( $first_row ) {
+
+					// Exclude for single column data
+					if ( $single ) {
+						array_shift( $file_rows );
+
+					// Include for multi-column data
+					} else {
+						array_unshift( $file_rows, $file_columns );
+					}
+				}
 
 				// Setup multi-column data map
 				if ( ! $single ) {
@@ -724,7 +738,27 @@ final class Bulk_Create_Users {
 
 					<table class="form-table">
 
-						<?php // Register to Sites ?>
+						<tr>
+							<th scope="row"><?php _e( 'First Row', 'bulk-create-users' ); ?></th>
+							<td>
+								<input type="checkbox" name="first-row" value="1" id="first-row" />
+								<label for="first-row"><?php 
+									if ( $single ) :
+										_e( 'Exclude the first row from the import', 'bulk-create-users' );
+									else :
+										_e( 'Include the first row in the import',   'bulk-create-users' );
+									endif;
+								?></label>
+								<p class="description"><?php 
+									if ( $single ) :
+										_e( 'By default, the first column will be included in the import',   'bulk-create-users' );
+									else :
+										_e( 'By default, the first column will be excluded from the import', 'bulk-create-users' );
+									endif;
+								?></p>
+							</td>
+						</tr>
+
 						<?php if ( is_multisite() && ( $sites = wp_get_sites() ) && 1 < count( $sites ) ) : ?>
 						<tr>
 							<th scope="row"><?php _e( 'Register to Sites', 'bulk-create-users' ); ?></th>
