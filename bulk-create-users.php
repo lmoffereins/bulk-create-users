@@ -317,7 +317,7 @@ final class Bulk_Create_Users {
 			$file_data = $this->get_option( '_bulk_create_users_uploaded_file_data' );
 
 			// Read form data
-			$overwrite = ! empty( $_REQUEST['overwrite-existing'] );
+			$overwrite = ! empty( $_REQUEST['update-existing'] );
 			$sites     = is_multisite() && ! empty( $_REQUEST['register-sites'] ) ? $_REQUEST['register-sites'] : array();
 
 			/**
@@ -756,10 +756,10 @@ final class Bulk_Create_Users {
 
 						<?php if ( ! $single ) : ?>
 						<tr>
-							<th scope="row"><?php _e( 'Overwrite Existing', 'bulk-create-users' ); ?></th>
+							<th scope="row"><?php _e( 'Update Existing', 'bulk-create-users' ); ?></th>
 							<td>
-								<input type="checkbox" name="overwrite-existing" value="1" id="overwrite-existing" />
-								<label for="overwrite-existing"><?php _e( 'When the email address already exists, update the user', 'bulk-create-users' ); ?></label>
+								<input type="checkbox" name="update-existing" value="1" id="update-existing" />
+								<label for="update-existing"><?php _e( 'When the email address already exists, update the user', 'bulk-create-users' ); ?></label>
 								<p class="description"><?php _e( 'By default, existing users (email addresses) will be skipped.', 'bulk-create-users' ); ?></p>
 							</td>
 						</tr>
@@ -778,8 +778,8 @@ final class Bulk_Create_Users {
 							<th scope="row"><?php _e( 'Registration Email', 'bulk-create-users' ); ?></th>
 							<td>
 								<input type="checkbox" name="registration-email" value="1" id="registration-email" />
-								<label for="registration-email"><?php _e( 'On user creation, send the new user a registration notification email.', 'bulk-create-users' ); ?></label>
-								<p class="description"><?php _e( 'This is the default WordPress registration notification email, containing the login credentials.', 'bulk-create-users' ); ?></p>
+								<label for="registration-email"><?php _e( 'On user creation, send the new-user registration notification emails.', 'bulk-create-users' ); ?></label>
+								<p class="description"><?php _e( 'These are the default WordPress registration notification emails, one to the new user, the other to the (network) admin.', 'bulk-create-users' ); ?></p>
 							</td>
 						</tr>
 					</table>
