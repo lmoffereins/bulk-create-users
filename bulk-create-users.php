@@ -180,24 +180,18 @@ final class Bulk_Create_Users {
 	 * @since 1.0.0
 	 *
 	 * @uses is_multisite()
-	 * @uses add_users_page()
+	 * @uses doing_action()
 	 * @uses add_submenu_page()
 	 * @uses add_action()
 	 */
 	public function admin_menu() {
 
-		// Define admin page args
-		$caller    = 'add_users_page';
-		$page_args = array( __( 'Bulk Create Users', 'bulk-create-users' ), __( 'Bulk Create', 'bulk-create-users' ), 'create_users', 'bulk-create-users', array( $this, 'admin_page' ) );
+		// When on MS do not register menu page for single sites
+		if ( is_multisite() && doing_action( 'admin_menu' ) )
+			return;
 
-		// Network
-		if ( is_multisite() ) {
-			$caller = 'add_submenu_page';
-			array_unshift( $page_args, 'users.php' );
-		}
-
-		// Create admin page
-		$hook = call_user_func_array( $caller, $page_args );
+		// Create menu page
+		$hook = add_submenu_page( 'users.php', __( 'Bulk Create Users', 'bulk-create-users' ), __( 'Bulk Create', 'bulk-create-users' ), 'create_users', 'bulk-create-users', array( $this, 'admin_page' ) );
 
 		// Add load hook
 		add_action( "load-$hook", array( $this, 'load_admin_page' ) );
