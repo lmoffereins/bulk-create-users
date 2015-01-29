@@ -188,7 +188,7 @@ final class Bulk_Create_Users {
 
 		// Define admin page args
 		$caller    = 'add_users_page';
-		$page_args = array( __( 'Bulk Create Users', 'bulk-create-users'), __( 'Bulk Create', 'bulk-create-users' ), 'create_users', 'bulk-create-users', array( $this, 'admin_page' ) );
+		$page_args = array( __( 'Bulk Create Users', 'bulk-create-users' ), __( 'Bulk Create', 'bulk-create-users' ), 'create_users', 'bulk-create-users', array( $this, 'admin_page' ) );
 
 		// Network
 		if ( is_multisite() ) {
@@ -751,13 +751,24 @@ final class Bulk_Create_Users {
 								?></label>
 								<p class="description"><?php 
 									if ( $single ) :
-										_e( 'By default, the first column will be included in the import',   'bulk-create-users' );
+										_e( 'By default, the first column will be included in the import.',   'bulk-create-users' );
 									else :
-										_e( 'By default, the first column will be excluded from the import', 'bulk-create-users' );
+										_e( 'By default, the first column will be excluded from the import.', 'bulk-create-users' );
 									endif;
 								?></p>
 							</td>
 						</tr>
+
+						<?php if ( ! $single ) : ?>
+						<tr>
+							<th scope="row"><?php _e( 'Update Existing', 'bulk-create-users' ); ?></th>
+							<td>
+								<input type="checkbox" name="update-existing" value="1" id="update-existing" />
+								<label for="update-existing"><?php _e( 'When the email address already exists, update the user', 'bulk-create-users' ); ?></label>
+								<p class="description"><?php _e( 'By default, existing users (email addresses) will be skipped.', 'bulk-create-users' ); ?></p>
+							</td>
+						</tr>
+						<?php endif; ?>
 
 						<?php if ( is_multisite() && ( $sites = wp_get_sites() ) && 1 < count( $sites ) ) : ?>
 						<tr>
@@ -784,17 +795,6 @@ final class Bulk_Create_Users {
 									</li>
 									<?php endforeach; ?>
 								</ul>
-							</td>
-						</tr>
-						<?php endif; ?>
-
-						<?php if ( ! $single ) : ?>
-						<tr>
-							<th scope="row"><?php _e( 'Update Existing', 'bulk-create-users' ); ?></th>
-							<td>
-								<input type="checkbox" name="update-existing" value="1" id="update-existing" />
-								<label for="update-existing"><?php _e( 'When the email address already exists, update the user', 'bulk-create-users' ); ?></label>
-								<p class="description"><?php _e( 'By default, existing users (email addresses) will be skipped.', 'bulk-create-users' ); ?></p>
 							</td>
 						</tr>
 						<?php endif; ?>
