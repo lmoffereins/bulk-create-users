@@ -115,7 +115,6 @@ final class Bulk_Create_Users {
 
 		// After user creation
 		add_action( 'bulk_create_users_user_created', array( $this, 'register_user_for_sites' ), 10, 1 ); // Only pass the first argument
-		add_action( 'bulk_create_users_user_created', array( $this, 'send_registration_email' ), 10, 2 );
 		add_action( 'bulk_create_users_user_created', array( $this, 'store_user_password'     ), 10, 2 );
 	}
 
@@ -316,7 +315,7 @@ final class Bulk_Create_Users {
 			$overwrite = ! empty( $_REQUEST['update-existing'] );
 
 			/**
-			 * The following logic is placed in a one-run do-while loop so 
+			 * The following logic is placed within a one-run do-while loop so 
 			 * we can break out of it more easily instead of using complex 
 			 * nested if-else statements.
 			 */
@@ -375,6 +374,49 @@ final class Bulk_Create_Users {
 						$data_map[ $col ]->context = strtok( $contextfield, '.' );
 						$data_map[ $col ]->field   = substr( $contextfield, strpos( $contextfield, '.' ) + 1 );
 					}
+				}
+
+				// Check custom email settings
+				if ( ! empty( $_REQUEST['notification-email'] ) ) {
+					switch ( $_REQUEST['notification-email'] ) :
+
+						// Default email
+						case 'default' :
+
+							// Hook to send default email
+							add_action( 'bulk_create_users_user_created', 'wp_new_user_notification', 10, 2 );
+							break;
+
+						// Custom email
+						case 'custom' :
+
+							// There were no fields passed
+							if ( ! isset( $_REQUEST['notification-email-custom'] ) ) {
+								$errors->add( 'custom_email_missing_fields', '' );
+								break;
+							}
+							$email_settings = array();
+							foreach ( array( 'from_name', 'from', 'subject', 'content', 'redirect' ) as $email_field ) {
+								$value = $_REQUEST['notification-email-custom'][ $email_field ];
+								switch ( $email_field ) {
+									case 'from_name' : $value = strip_tags( $value ); break;
+									case 'from' : $value = sanitize_email( $value ); break;
+									case 'subject' : $value = strip_tags( $value ); break;
+									case 'content' : $value = wpautop( wp_kses( $value, wp_kses_allowed_html() ) ); break;
+									case 'redirect' : $value = esc_url_raw( $value ); break;
+								}
+								if ( empty( $value ) )
+									$value = '';
+
+								$email_settings[ $email_field ] = $value;
+							}
+							update_site_option( 'bulk_create_users_custom_email', $email_settings );
+
+							// Hook to send custom email
+							add_action( 'bulk_create_users_user_created', array( $this, 'registration_custom_email' ), 10, 2 );
+							break;
+
+					endswitch;
 				}
 
 				// Setup collection of created and updated users
@@ -732,7 +774,7 @@ final class Bulk_Create_Users {
 
 					<table class="form-table">
 
-						<tr>
+						<tr id="setting-first-row">
 							<th scope="row"><?php _e( 'First Row', 'bulk-create-users' ); ?></th>
 							<td>
 								<input type="checkbox" name="first-row" value="1" id="first-row" />
@@ -754,7 +796,7 @@ final class Bulk_Create_Users {
 						</tr>
 
 						<?php if ( ! $single ) : ?>
-						<tr>
+						<tr id="setting-update-existing">
 							<th scope="row"><?php _e( 'Update Existing', 'bulk-create-users' ); ?></th>
 							<td>
 								<input type="checkbox" name="update-existing" value="1" id="update-existing" />
@@ -765,7 +807,7 @@ final class Bulk_Create_Users {
 						<?php endif; ?>
 
 						<?php if ( is_multisite() && ( $sites = wp_get_sites() ) && 1 < count( $sites ) ) : ?>
-						<tr>
+						<tr id="setting-register-sites">
 							<th scope="row"><?php _e( 'Register to Sites', 'bulk-create-users' ); ?></th>
 							<td>
 								<p class="description"><?php _e( 'Select the sites for which to register the users. Defaults to the main site.', 'bulk-create-users' ); ?></p>
@@ -793,21 +835,92 @@ final class Bulk_Create_Users {
 						</tr>
 						<?php endif; ?>
 
-						<tr>
+						<tr id="setting-keep-password">
 							<th scope="row"><?php _e( 'Keep Password', 'bulk-create-users' ); ?></th>
 							<td>
 								<input type="checkbox" name="store-password" value="1" id="store-password" />
-								<label for="store-password"><?php _e( 'On user creation, store the registration password and keep it for later use.', 'bulk-create-users' ); ?></label>
+								<label for="store-password"><?php _e( 'On user creation, store the registration password and keep it for later use', 'bulk-create-users' ); ?></label>
 								<p class="description"><?php printf( __( 'The registration password will be stored in the %s user meta field.', 'bulk-create-users' ), '<code>_registration_password</code>' ); ?></p>
 							</td>
 						</tr>
 
-						<tr>
-							<th scope="row"><?php _e( 'Registration Email', 'bulk-create-users' ); ?></th>
+						<tr id="setting-notification-email">
+							<th scope="row"><?php _e( 'Notify New Users', 'bulk-create-users' ); ?></th>
 							<td>
-								<input type="checkbox" name="registration-email" value="1" id="registration-email" />
-								<label for="registration-email"><?php _e( 'On user creation, send the new-user registration notification emails.', 'bulk-create-users' ); ?></label>
-								<p class="description"><?php _e( 'These are the default WordPress registration notification emails, one to the new user, the other to the (network) admin.', 'bulk-create-users' ); ?></p>
+								<input type="radio" name="notification-email" value="none" id="notification-email-none" checked="checked" />
+								<label for="notification-email-none"><?php _e( 'Do not send a notification email', 'bulk-create-users' ); ?></label><br/>
+								<input type="radio" name="notification-email" value="default" id="notification-email-default" />
+								<label for="notification-email-default"><?php _e( 'Send the default WordPress notification emails', 'bulk-create-users' ); ?></label><br/>
+								<input type="radio" name="notification-email" value="custom" id="notification-email-custom" />
+								<label for="notification-email-custom"><?php _e( 'Send a custom notification email', 'bulk-create-users' ); ?></label><br/>
+
+								<div id="notification-email-custom-settings">
+									<h4><?php _e( 'Custom Email Settings', 'bulk-create-users' ); ?></h4>
+									<?php $settings = (object) wp_parse_args( get_site_option( 'bulk_create_users_custom_email', array() ), array(
+										'from'      => '',
+										'from_name' => '',
+
+										// Mimic wp_new_user_notification() subject and content
+										'subject'   => sprintf( __( '[%s] Your username and password' ), '%site_name%' ),
+										'content'   => sprintf( __( 'Username: %s' ), '%user_login%' ) . "\r\n" . sprintf( __( 'Password: %s' ), '%password%'   ) . "\r\n%login_url%\r\n",
+										'redirect'  => ''
+									) ); ?>
+
+									<table class="form-table">
+										<tr>
+											<th><?php _e( 'From Name', 'bulk-create-users' ); ?>
+											<td>
+												<input type="text" class="regular-text" name="notification-email-custom[from_name]" value="<?php echo $settings->from_name; ?>" id="email-custom-from-name" />
+												<p class="description"><label for="email-custom-from-name"><?php _e( 'Define the name of the sender.', 'bulk-create-users' ); ?></label></p>
+											</td>
+										</tr>
+										<tr>
+											<th><?php _e( 'From Address', 'bulk-create-users' ); ?>
+											<td>
+												<input type="email" class="regular-text" name="notification-email-custom[from]" value="<?php echo $settings->from; ?>" id="email-custom-from" />
+												<p class="description"><label for="email-custom-from"><?php _e( 'Define the email address of the sender.', 'bulk-create-users' ); ?></label></p>
+											</td>
+										</tr>
+										<tr>
+											<th><?php _e( 'Email Subject', 'bulk-create-users' ); ?>
+											<td>
+												<input type="text" class="regular-text" name="notification-email-custom[subject]" value="<?php echo $settings->subject; ?>" id="email-custom-subject" />
+												<p class="description"><label for="email-custom-subject"><?php _e( 'Define the subject of the notification email.', 'bulk-create-users' ); ?></label></p>
+											</td>
+										</tr>
+										<tr>
+											<th><?php _e( 'Email Content', 'bulk-create-users' ); ?>
+											<td>
+												<p class="description"><label for="email-custom-content"><?php printf( __( 'Define the content of the notification email. Click <a href="%s">the help tab</a> to view the available variables (i.e. login, password).', 'bulk-create-users' ), '#' ); ?></label></p>
+												<?php wp_editor( $settings->content, 'email-custom-content', array( 'textarea_name' => 'notification-email-custom[content]', 'media_buttons' => false ) ); ?>
+											</td>
+										</tr>
+										<tr>
+											<th><?php _e( 'Login Redirect', 'bulk-create-users' ); ?>
+											<td>
+												<input type="url" class="regular-text" name="notification-email-custom[redirect]" value="<?php echo $settings->redirect; ?>" id="email-custom-redirect" />
+												<p class="description"><label for="email-custom-redirect"><?php _e( 'When sending the login link: Define the url to which to redirect the user after login.', 'bulk-create-users' ); ?></label></p>
+											</td>
+										</tr>
+									</table>
+								</div>
+
+
+
+								<style>
+									#setting-notification-email td > input,
+									#setting-notification-email td > input + label {
+										display: inline-block;
+										margin-bottom: 6px;
+									}
+									#notification-email-custom-settings {
+										display: none;
+										margin-top: 1em;
+									}
+									input[name="notification-email"][value="custom"]:checked ~ #notification-email-custom-settings {
+										display: block;
+									}
+								</style>
 							</td>
 						</tr>
 					</table>
@@ -1006,18 +1119,19 @@ final class Bulk_Create_Users {
 		$messages = array(
 			'info'    => apply_filters( 'bulk_create_users_info_messages', array() ),
 			'error'   => apply_filters( 'bulk_create_users_error_messages', array(
-				'no_file_found'         => __( 'Sorry, we could not find your file.', 'bulk-create-users' ),
-				'unreadable_file'       => __( 'Sorry, we could not read the uploaded file.', 'bulk-create-users' ),
-				'invalid_single_column' => __( 'Sorry, we can only proces single column files if it contains email addresses.', 'bulk-create-users' ),
-				'invalid_data'          => __( 'Sorry, the data from your file is gone or invalid.', 'bulk-create-users' ),
-				'invalid_mapping'       => __( 'Sorry, the selected data options were incomplete or invalid.', 'bulk-create-users' ),
-				'missing_email_field'   => __( 'Sorry, but we need an email field to register or recognize the users with.', 'bulk-create-users' ),
-				'nothing_changed'       => __( 'Sorry, all users already exist.', 'bulk-create-users' ),
+				'no_file_found'               => __( 'Sorry, we could not find your file.', 'bulk-create-users' ),
+				'unreadable_file'             => __( 'Sorry, we could not read the uploaded file.', 'bulk-create-users' ),
+				'invalid_single_column'       => __( 'Sorry, we can only proces single column files if it contains email addresses.', 'bulk-create-users' ),
+				'invalid_data'                => __( 'Sorry, the data from your file is gone or invalid.', 'bulk-create-users' ),
+				'invalid_mapping'             => __( 'Sorry, the selected data options were incomplete or invalid.', 'bulk-create-users' ),
+				'missing_email_field'         => __( 'Sorry, but we need an email field to register or recognize the users with.', 'bulk-create-users' ),
+				'nothing_changed'             => __( 'Sorry, all users already exist.', 'bulk-create-users' ),
+				'custom_email_missing_fields' => __( 'Sorry, we did not find any settings for your custom email to be sent.', 'bulk-create-users' ),
 			) ),
 			'success' => apply_filters( 'bulk_create_users_success_messages', array(
-				'created_users'         => _n_noop( 'Successfully created %d user: %s', 'Successfully created %d users: %s', 'bulk-create-users' ),
-				'updated_users'         => _n_noop( 'Successfully updated %d user: %s', 'Successfully updated %d users: %s', 'bulk-create-users' ),
-				'removed_users'         => __( 'Succesfully removed the recently created users from your installation.', 'bulk-create-users' ),
+				'created_users'               => _n_noop( 'Successfully created %d user: %s', 'Successfully created %d users: %s', 'bulk-create-users' ),
+				'updated_users'               => _n_noop( 'Successfully updated %d user: %s', 'Successfully updated %d users: %s', 'bulk-create-users' ),
+				'removed_users'               => __( 'Succesfully removed the recently created users from your installation.', 'bulk-create-users' ),
 			) ),
 		);
 
@@ -1166,23 +1280,46 @@ final class Bulk_Create_Users {
 	}
 
 	/**
-	 * Send the default user registration notification email
+	 * Send the custom registration notification email
 	 *
-	 * @since 1.0.0
-	 *
-	 * @uses doing_action()
-	 * @uses wp_new_user_notification()
-	 *
+	 * @since 1.1.0
+	 * 
 	 * @param int $user_id User ID
 	 * @param string $user_pass User password
 	 */
-	public function send_registration_email( $user_id, $user_pass ) {
+	public function registration_custom_email( $user_id, $user_pass ) {
+		$user = get_userdata( $user_id );
+		$args = (object) wp_parse_args( get_site_option( 'bulk_create_users_custom_email', array() ), array(
+			'from'      => '',
+			'from_name' => '',
+			'subject'   => '',
+			'content'   => '',
+			'redirect'  => ''
+		) );
+		$subject = wp_specialchars_decode( $args->subject, ENT_QUOTES );
 
-		// Bail when requested not to send
-		if ( doing_action( 'bulk_create_users_user_created' ) && empty( $_REQUEST['registration-email'] ) )
-			return;
+		// Manual string replacement
+		$content = str_replace( '%user_login%', $user->user_login,               $args->content );
+		$content = str_replace( '%password%',   $user_pass,                      $content       );
+		$content = str_replace( '%login_url%',  wp_login_url( $args->redirect ), $content       );
 
-		wp_new_user_notification( $user_id, $user_pass );
+		add_filter( 'wp_mail_content_type', array( $this, 'wp_mail_html_content_type' ) );
+
+		// Send the notification email
+		wp_mail( $user->user_email, $subject, $content );
+
+		remove_filter( 'wp_mail_content_type', array( $this, 'wp_mail_html_content_type' ) );
+	}
+
+	/**
+	 * Return the HTML mail content type
+	 *
+	 * @since 1.1.0
+	 * 
+	 * @return string HTML mail content type
+	 */
+	public function wp_mail_html_content_type() {
+		return 'text/html';
 	}
 
 	/**
