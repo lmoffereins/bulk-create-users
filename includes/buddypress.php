@@ -42,8 +42,9 @@ final class Bulk_Create_Users_Buddypress {
 		add_filter( 'bulk_create_users_data_fields', array( $this, 'data_fields' ) );
 
 		// Saving fields
-		add_action( 'bulk_create_users_import_bp-xprofile', array( $this, 'import_xprofile' ), 10, 3 );
-		add_action( 'bulk_create_users_import_bp-groups',   array( $this, 'import_groups'   ), 10, 3 );
+		add_action( 'bulk_create_users_import_bp-member-types', array( $this, 'import_member_types' ), 10, 3 );
+		add_action( 'bulk_create_users_import_bp-xprofile',     array( $this, 'import_xprofile'     ), 10, 3 );
+		add_action( 'bulk_create_users_import_bp-groups',       array( $this, 'import_groups'       ), 10, 3 );
 	}
 
 	/** Public methods **************************************************/
@@ -53,6 +54,7 @@ final class Bulk_Create_Users_Buddypress {
 	 *
 	 * @since 1.0.0
 	 *
+	 * @uses bp_get_member_types()
 	 * @uses bp_is_active()
 	 * @uses bp_xprofile_get_groups()
 	 * @uses groups_get_groups()
@@ -61,6 +63,25 @@ final class Bulk_Create_Users_Buddypress {
 	 * @return array Data fields
 	 */
 	public function data_fields( $fields ) {
+
+		// Member Types (BP 2.2+)
+		if ( function_exists( 'bp_get_member_types' ) ) {
+
+			// Get all member types
+			$types = bp_get_member_types( array(), 'objects' );
+
+			// Setup options array
+			$options = array();
+			foreach ( $types as $member_type ) {
+				$options[ $member_type->name ] = $member_type->labels['singular_name'];
+			}
+
+			// Append Member Types options
+			$fields['bp-member-types'] = array(
+				'label'   => __( 'Buddpress Member Types', 'bulk-create-users' ),
+				'options' => $options,
+			);
+		}
 
 		// XProfile Component
 		if ( bp_is_active( 'xprofile' ) ) {
@@ -106,22 +127,56 @@ final class Bulk_Create_Users_Buddypress {
 	}
 
 	/**
+	 * Handle logic of registering users to Buddypress Member Types
+	 *
+	 * @since 1.1.0
+	 *
+	 * @uses bp_get_member_type_object()
+	 * @uses bool_from_yn()
+	 * @uses bp_set_member_type()
+	 * @uses bp_get_member_type()
+	 * @uses bp_set_object_terms()
+	 *
+	 * @param string $member_type Selected Member Type name
+	 * @param int $user_id User ID
+	 * @param string $value Uploaded field value
+	 */
+	public function import_member_types( $member_type, $user_id, $value ) {
+
+		// Member Type exists
+		if ( bp_get_member_type_object( $member_type ) ) {
+
+			// Add or remove based on boolean value
+			if ( ( is_numeric( $value ) && (bool) $value ) || bool_from_yn( $value ) ) {
+				bp_set_member_type( $user_id, $member_type, true );
+			} else {
+				$retval = bp_set_object_terms( $user_id, array_diff( (array) bp_get_member_type( $user_id, false ), array( $member_type ) ), 'bp_member_type' );
+
+				// Bust the cache if the type has been updated.
+				if ( ! is_wp_error( $retval ) ) {
+					wp_cache_delete( $user_id, 'bp_member_type' );
+				}
+			}
+		}
+	}
+
+	/**
 	 * Handle logic of saving data to Buddypress XProfile fields
 	 *
 	 * @since 1.0.0
 	 *
 	 * @uses xprofile_set_field_data()
 	 * 
-	 * @param string $field Field destination
+	 * @param string $field_id Selected XProfile field ID
 	 * @param int $user_id User ID
 	 * @param string $value Uploaded field value
 	 */
-	public function import_xprofile( $field, $user_id, $value ) {
-		xprofile_set_field_data( $field, $user_id, $value );
+	public function import_xprofile( $field_id, $user_id, $value ) {
+		xprofile_set_field_data( $field_id, $user_id, $value );
 	}
 
 	/**
-	 * Handle logic of saving data to Buddypress Groups fields
+	 * Handle logic of registering users to Buddypress Groups fields
 	 *
 	 * @since 1.0.0
 	 *
@@ -131,14 +186,14 @@ final class Bulk_Create_Users_Buddypress {
 	 * @uses bool_from_yn()
 	 * @uses groups_leave_group()
 	 * 
-	 * @param string $field Field destination
+	 * @param string $group_id Selected group ID
 	 * @param int $user_id User ID
 	 * @param string $value Uploaded field value
 	 */
-	public function import_groups( $field, $user_id, $value ) {
+	public function import_groups( $group_id, $user_id, $value ) {
 
 		// Collect group slugs
-		if ( '0' === $field && ! empty( $value ) ) {
+		if ( '0' === $group_id && ! empty( $value ) ) {
 			$slugs = array_map( 'trim', array_map( 'sanitize_key', explode( ',', $value ) ) );
 
 			// Walk all groups
@@ -152,13 +207,13 @@ final class Bulk_Create_Users_Buddypress {
 			}
 
 		// Single group exists
-		} elseif ( is_numeric( $field ) && groups_get_group( array( 'group_id' => (int) $field ) ) instanceof BP_Groups_Group ) {
+		} elseif ( is_numeric( $group_id ) && groups_get_group( array( 'group_id' => (int) $group_id ) ) instanceof BP_Groups_Group ) {
 
-			// Join or leave based on boolean field
+			// Join or leave based on boolean value
 			if ( ( is_numeric( $value ) && (bool) $value ) || bool_from_yn( $value ) ) {
-				groups_join_group( (int) $field, $user_id );
+				groups_join_group( (int) $group_id, $user_id );
 			} else {
-				groups_leave_group( (int) $field, $user_id );
+				groups_leave_group( (int) $group_id, $user_id );
 			}
 		}
 	}
