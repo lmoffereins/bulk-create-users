@@ -152,7 +152,7 @@ final class Bulk_Create_Users_Buddypress {
 			}
 
 		// Single group exists
-		} elseif ( is_numeric( $field ) && is_a( groups_get_group( array( 'group_id' => (int) $field ) ), 'BP_Groups_Group' ) ) {
+		} elseif ( is_numeric( $field ) && groups_get_group( array( 'group_id' => (int) $field ) ) instanceof BP_Groups_Group ) {
 
 			// Join or leave based on boolean field
 			if ( ( is_numeric( $value ) && (bool) $value ) || bool_from_yn( $value ) ) {
