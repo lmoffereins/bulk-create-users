@@ -16,16 +16,21 @@ This plugin runs on both single site and multisite installations, under Admin > 
 
 The default import settings contain:
 * Map csv columns to data fields
-* Register created users to selected blogs (multisite)
 * Update or skip existing users
+* Register users for selected sites (multisite)
 * Store the password of created users for later use
-* Do or do not send the default WordPress registration notification email
+* Registration email: don't send, send default email, send custom email
 
 This plugin has various filters to extend its use and add support for other user data fields.
 
-This plugin has out of the box support for Buddypress XProfile fields and User Groups.
+This plugin has out of the box support for Buddypress Member Types, XProfile fields and User Groups.
 
 == Changelog ==
+
+= 1.1.0 =
+* Added option to include/exclude the first data row
+* Added option to send a custom user registration email
+* Added support for Buddypress Member Types (since BP 2.2)
 
 = 1.0.1 =
 * Fixed collecting updated users
