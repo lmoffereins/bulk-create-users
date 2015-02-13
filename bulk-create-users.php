@@ -1289,25 +1289,26 @@ final class Bulk_Create_Users {
 	 */
 	public function registration_custom_email( $user_id, $user_pass ) {
 		$user = get_userdata( $user_id );
-		$args = (object) wp_parse_args( get_site_option( 'bulk_create_users_custom_email', array() ), array(
+		$args = apply_filters( 'bulk_create_users_custom_email', wp_parse_args( get_site_option( 'bulk_create_users_custom_email', array() ), array(
 			'from'      => '',
 			'from_name' => '',
 			'subject'   => '',
 			'content'   => '',
 			'redirect'  => ''
-		) );
-		$subject = wp_specialchars_decode( $args->subject, ENT_QUOTES );
+		) ) );
 
 		// Manual string replacement
-		$content = str_replace( '%user_login%', $user->user_login,               $args->content );
-		$content = str_replace( '%password%',   $user_pass,                      $content       );
-		$content = str_replace( '%login_url%',  wp_login_url( $args->redirect ), $content       );
+		$content = str_replace( '%user_login%', $user->user_login,                 $args['content'] );
+		$content = str_replace( '%password%',   $user_pass,                        $content         );
+		$content = str_replace( '%login_url%',  wp_login_url( $args['redirect'] ), $content         );
 
+		// Set content type
 		add_filter( 'wp_mail_content_type', array( $this, 'wp_mail_html_content_type' ) );
 
 		// Send the notification email
-		wp_mail( $user->user_email, $subject, $content );
+		wp_mail( $user->user_email, wp_specialchars_decode( $args['subject'], ENT_QUOTES ), $content );
 
+		// Undo content type
 		remove_filter( 'wp_mail_content_type', array( $this, 'wp_mail_html_content_type' ) );
 	}
 
