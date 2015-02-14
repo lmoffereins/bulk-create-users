@@ -1175,8 +1175,9 @@ final class Bulk_Create_Users {
 	 * Run the logic for registering a new user
 	 *
 	 * This is our own extended implementation of {@link register_new_user()}. Most
-	 * importantly it removes the wp_new_user_notification() call, and adds a
-	 * dedicated post-user-creation hook with the user ID and user password.
+	 * importantly it removes the wp_new_user_notification() call for later addition
+	 * to the dedicated post-user-creation hook, that uses the user ID and user plain 
+	 * password.
 	 *
 	 * @since 1.0.0
 	 *
@@ -1231,7 +1232,7 @@ final class Bulk_Create_Users {
 
 		update_user_option( $user_id, 'default_password_nag', true, true ); //Set up the Password change nag.
 
-		/** The missing after-new-user-creation hook */
+		// The dedicated after-new-user-creation hook
 		do_action( 'bulk_create_users_user_created', $user_id, $user_pass );
 
 		return $user_id;
