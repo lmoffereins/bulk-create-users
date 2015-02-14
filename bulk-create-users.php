@@ -114,11 +114,16 @@ final class Bulk_Create_Users {
 		add_action( 'network_admin_menu', array( $this, 'admin_menu' ) );
 
 		// After user creation
-		add_action( 'bulk_create_users_user_created', array( $this, 'register_user_for_sites' ), 10, 1 ); // Only pass the first argument
-		add_action( 'bulk_create_users_user_created', array( $this, 'store_user_password'     ), 10, 2 );
+		add_action( 'bulk_create_users_new_user', array( $this, 'register_user_for_sites' ), 10, 1 ); // Only pass the first argument
+		add_action( 'bulk_create_users_new_user', array( $this, 'store_user_password'     ), 10, 2 );
 	}
 
 	/** Public methods **************************************************/
+
+	/**
+	 * Import sessions are tied to the current user, so session options
+	 * are stored as user meta.
+	 */
 
 	/**
 	 * Shortcut for returning the given plugin option
@@ -384,7 +389,7 @@ final class Bulk_Create_Users {
 						case 'default' :
 
 							// Hook to send default email
-							add_action( 'bulk_create_users_user_created', 'wp_new_user_notification', 10, 2 );
+							add_action( 'bulk_create_users_new_user', 'wp_new_user_notification', 10, 2 );
 							break;
 
 						// Custom email
@@ -413,7 +418,7 @@ final class Bulk_Create_Users {
 							update_site_option( 'bulk_create_users_custom_email', $email_settings );
 
 							// Hook to send custom email
-							add_action( 'bulk_create_users_user_created', array( $this, 'registration_custom_email' ), 10, 2 );
+							add_action( 'bulk_create_users_new_user', array( $this, 'registration_custom_email' ), 10, 2 );
 							break;
 
 					endswitch;
@@ -1233,7 +1238,7 @@ final class Bulk_Create_Users {
 		update_user_option( $user_id, 'default_password_nag', true, true ); //Set up the Password change nag.
 
 		// The dedicated after-new-user-creation hook
-		do_action( 'bulk_create_users_user_created', $user_id, $user_pass );
+		do_action( 'bulk_create_users_new_user', $user_id, $user_pass );
 
 		return $user_id;
 	}
@@ -1270,7 +1275,7 @@ final class Bulk_Create_Users {
 		}
 
 		// When running after user creation, match sites exactly
-		if ( doing_action( 'bulk_create_users_user_created' ) ) {
+		if ( doing_action( 'bulk_create_users_new_user' ) ) {
 			$exact = true;
 		}
 
