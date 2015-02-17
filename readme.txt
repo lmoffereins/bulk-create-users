@@ -27,6 +27,9 @@ This plugin has out of the box support for Buddypress Member Types, XProfile fie
 
 == Changelog ==
 
+= 1.1.1 =
+* Fixed custom email From and From Name usage
+
 = 1.1.0 =
 * Added option to include/exclude the first data row
 * Added option to send a custom user registration email

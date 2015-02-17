@@ -5,6 +5,8 @@
  * 
  * @package Bulk Create Users
  * @subpackage Main
+ *
+ * @todo Add custom email vars hint
  */
 
 /**
@@ -867,7 +869,7 @@ final class Bulk_Create_Users {
 
 										// Mimic wp_new_user_notification() subject and content
 										'subject'   => sprintf( __( '[%s] Your username and password' ), '%site_name%' ),
-										'content'   => sprintf( __( 'Username: %s' ), '%user_login%' ) . "\r\n" . sprintf( __( 'Password: %s' ), '%password%'   ) . "\r\n%login_url%\r\n",
+										'content'   => sprintf( __( 'Username: %s' ), '###USERNAME###' ) . "\r\n" . sprintf( __( 'Password: %s' ), '###PASSWORD###' ) . "\r\n###LOGINURL###\r\n",
 										'redirect'  => ''
 									) ); ?>
 
@@ -1303,16 +1305,19 @@ final class Bulk_Create_Users {
 			'redirect'  => ''
 		) ) );
 
+		// Define From: header
+		$headers = array( 'From: "' . $args['from_name'] . '" <' . $args['from'] . '>' );
+
 		// Manual string replacement
-		$content = str_replace( '%user_login%', $user->user_login,                 $args['content'] );
-		$content = str_replace( '%password%',   $user_pass,                        $content         );
-		$content = str_replace( '%login_url%',  wp_login_url( $args['redirect'] ), $content         );
+		$content = str_replace( '###USERNAME###', $user->user_login,                 $args['content'] );
+		$content = str_replace( '###PASSWORD###', $user_pass,                        $content         );
+		$content = str_replace( '###LOGINURL###', wp_login_url( $args['redirect'] ), $content         );
 
 		// Set content type
 		add_filter( 'wp_mail_content_type', array( $this, 'wp_mail_html_content_type' ) );
 
 		// Send the notification email
-		wp_mail( $user->user_email, wp_specialchars_decode( $args['subject'], ENT_QUOTES ), $content );
+		wp_mail( $user->user_email, wp_specialchars_decode( $args['subject'], ENT_QUOTES ), $content, $headers );
 
 		// Undo content type
 		remove_filter( 'wp_mail_content_type', array( $this, 'wp_mail_html_content_type' ) );
