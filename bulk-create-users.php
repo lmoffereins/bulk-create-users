@@ -440,6 +440,9 @@ final class Bulk_Create_Users {
 					// Key: get the email field value
 					$email = $single ? $user_row[0] : $user_row[ array_search( 'users.user_email', $_data_map ) ];
 
+					// Trim the fat
+					$email = trim( $email );
+
 					// Skip invalid emails
 					if ( ! is_email( $email ) ) {
 						$created_users[ $i ] = new WP_Error( 'invalid_email', __( '<strong>ERROR</strong>: The email address isn&#8217;t correct.' ) );
@@ -463,28 +466,28 @@ final class Bulk_Create_Users {
 							}
 
 							// ... or firstname + lastname field ...
-							if ( ( ! $login || username_exists( $login ) ) && false !== $fname_col && false !== $lname_col ) {
+							if ( ( ! empty( $login ) || username_exists( $login ) ) && false !== $fname_col && false !== $lname_col ) {
 								$login = sanitize_user( $user_row[ $fname_col ] . '_' . $user_row[ $lname_col ], true );
 							}
 
 							// ... or lastname field ...
-							if ( ( ! $login || username_exists( $login ) ) && false !== $lname_col ) {
+							if ( ( ! empty( $login ) || username_exists( $login ) ) && false !== $lname_col ) {
 								$login = sanitize_user( $user_row[ $lname_col ], true );
 							}
 
 							// ... or firstname field
-							if ( ( ! $login || username_exists( $login ) ) && false !== $fname_col ) {
+							if ( ( ! empty( $login ) || username_exists( $login ) ) && false !== $fname_col ) {
 								$login = sanitize_user( $user_row[ $fname_col ], true );
 							}
 						}
 
 						// Any column: default to email field
-						if ( ! $login || username_exists( $login ) ) {
+						if ( ! empty( $login ) || username_exists( $login ) ) {
 							$login = $this->generate_login_from_email( $email );
 						}
 
 						// Could not create a valid username
-						if ( ! $login ) {
+						if ( ! empty( $login ) ) {
 							$created_users[ $i ] = new WP_Error( 'invalid_username', __( '<strong>ERROR</strong>: Could not gerenate a valid user name.', 'bulk-create-users' ) );
 							continue;
 
