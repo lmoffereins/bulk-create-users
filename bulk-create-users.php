@@ -375,10 +375,18 @@ final class Bulk_Create_Users {
 					// Setup data map
 					$data_map  = array();
 					foreach ( $_data_map as $col => $contextfield ) {
+
+						// Skip when this col's field is not defined
 						if ( empty( $contextfield ) )
 							continue;
+
+						// This field's data map is an object...
 						$data_map[ $col ] = new stdClass;
+
+						// ... with the context, before the '.'
 						$data_map[ $col ]->context = strtok( $contextfield, '.' );
+
+						// ... and the field name, after the '.'
 						$data_map[ $col ]->field   = substr( $contextfield, strpos( $contextfield, '.' ) + 1 );
 					}
 				}
@@ -509,9 +517,11 @@ final class Bulk_Create_Users {
 						$updated_users[] = $user_id;
 					}
 
-					// Update base user data
+					// Setup base user data without email. We used the email field already.
 					$data_map_without_email = $data_map;
 					unset( $data_map_without_email[ array_search( 'users.user_email', $_data_map ) ] );
+
+					// Update base user data
 					if ( ( $users_data = wp_list_filter( $data_map_without_email, array( 'context' => 'users' ) ) ) && ! empty( $users_data ) ) {
 
 						// Define update args variable
@@ -531,7 +541,7 @@ final class Bulk_Create_Users {
 
 						// Define this row & column's specific params
 						$field = $data_map[ $col ];
-						$value = $user_row[ $col ];
+						$input = trim( $user_row[ $col ] );
 
 						// Check the field's context
 						switch ( $field->context ) {
@@ -544,12 +554,25 @@ final class Bulk_Create_Users {
 							case 'usermeta' :
 
 								// Use column title as meta key or use the map's field
-								update_user_meta( $user_id, ( 'usermeta' == $field->field ) ? $file_columns[ $col ] : $field->field, $value );
+								update_user_meta( $user_id, ( 'usermeta' == $field->field ) ? $file_columns[ $col ] : $field->field, $input );
 								break;
 
-							// Provide custom field saving
+							// Provide hook for custom field saving
 							default :
-								do_action( "bulk_create_users_import_{$field->context}", $field->field, $user_id, $value );
+								/**
+								 * Act on importing a specific field of a specific context for the imported user.
+								 * 
+								 * The dynamic portion of the hook name, `$field->context`, refers to the
+								 * context name of the current processed field. This is the context under
+								 * which the field is registered in Bulk_Create_Users::data_fields().
+								 *
+								 * @since 1.0.0
+								 *
+								 * @param string $field   Field name to process.
+								 * @param int    $user_id User ID of the imported user.
+								 * @param string $input   Provided input value.
+								 */
+								do_action( "bulk_create_users_import_{$field->context}", $field->field, $user_id, $input );
 								break;
 						}
 					}
@@ -1035,7 +1058,7 @@ final class Bulk_Create_Users {
 	public function data_fields() {
 		return (array) apply_filters( 'bulk_create_users_data_fields', array(
 
-			// Base user data handled by wp_update_user()
+			// Context: Base user data handled by wp_update_user()
 			'users' => array(
 				'label'   => __( 'Base Data', 'bulk-create-users' ),
 				'options' => array(
@@ -1052,7 +1075,7 @@ final class Bulk_Create_Users {
 				)
 			),
 
-			// User meta fields
+			// Context: User meta fields
 			'usermeta' => array(
 				'label'   => __( 'User Meta', 'bulk-create-users' ),
 				'options' => array(
