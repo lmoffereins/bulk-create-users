@@ -779,7 +779,7 @@ final class Bulk_Create_Users {
 
 				<div class="notice notice-info">
 					<p><?php printf( ( ! $is_single ? __( 'We found %1$d columns and %2$d rows in your file.', 'bulk-create-users' ) : __( 'We found 1 column and %2$d rows in your file', 'bulk-create-users' ) ),
-						$column_count, $row_count
+						$column_count, $row_count + 1
 					); ?></p>
 				</div>
 
