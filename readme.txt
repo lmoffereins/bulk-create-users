@@ -29,6 +29,8 @@ This plugin has out of the box support for Buddypress Member Types, XProfile fie
 
 = 1.1.1 =
 * Fixed custom email From and From Name usage
+* Fixed multisite site registration when updating users
+* Fixed row count message
 
 = 1.1.0 =
 * Added option to include/exclude the first data row
