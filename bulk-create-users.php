@@ -339,13 +339,13 @@ final class Bulk_Create_Users {
 				$file_rows    = $file_data['rows'];
 
 				// Define whether we're processing a single column file
-				$single = ( 1 == count( $file_columns ) );
+				$is_single = ( 1 == count( $file_columns ) );
 
 				// Consider the first data row
 				if ( $first_row ) {
 
 					// Exclude for single column data
-					if ( $single ) {
+					if ( $is_single ) {
 						array_shift( $file_rows );
 
 					// Include for multi-column data
@@ -355,7 +355,7 @@ final class Bulk_Create_Users {
 				}
 
 				// Setup multi-column data map
-				if ( ! $single ) {
+				if ( ! $is_single ) {
 
 					// Report error when data map is missing
 					if ( ! isset( $_REQUEST['map_to'] ) || empty( $_REQUEST['map_to'] ) ) {
@@ -410,6 +410,8 @@ final class Bulk_Create_Users {
 								$errors->add( 'custom_email_missing_fields', '' );
 								break;
 							}
+
+							// Collect custom email settings
 							$email_settings = array();
 							foreach ( array( 'from_name', 'from', 'subject', 'content', 'redirect' ) as $email_field ) {
 								$value = $_REQUEST['notification-email-custom'][ $email_field ];
@@ -425,6 +427,8 @@ final class Bulk_Create_Users {
 
 								$email_settings[ $email_field ] = $value;
 							}
+
+							// Store custom email settings as option for repeated use
 							update_site_option( 'bulk_create_users_custom_email', $email_settings );
 
 							// Hook to send custom email
@@ -446,7 +450,7 @@ final class Bulk_Create_Users {
 					$login   = false;
 
 					// Key: get the email field value
-					$email = $single ? $user_row[0] : $user_row[ array_search( 'users.user_email', $_data_map ) ];
+					$email = $is_single ? $user_row[0] : $user_row[ array_search( 'users.user_email', $_data_map ) ];
 
 					// Trim the fat
 					$email = trim( $email );
@@ -461,7 +465,7 @@ final class Bulk_Create_Users {
 					if ( ! $user_id = email_exists( $email ) ) {
 
 						// Multi-column
-						if ( ! $single ) {
+						if ( ! $is_single ) {
 
 							// Find fields we can create a username with
 							$login_col = array_search( 'users.user_login',     $_data_map );
@@ -504,7 +508,7 @@ final class Bulk_Create_Users {
 							$created_users[ $i ] = $user_id = $this->register_new_user( $login, $email );
 
 							// For single column files it ends here
-							if ( $single )
+							if ( $is_single )
 								continue;
 						}
 
@@ -662,7 +666,7 @@ final class Bulk_Create_Users {
 			$column_count = count( $file_data['columns'] );
 
 			// Define whether we're processing a single column file
-			$single = 1 == $column_count;
+			$is_single = 1 == $column_count;
 		} else {
 			$step = 0;
 		} ?>
@@ -774,7 +778,7 @@ final class Bulk_Create_Users {
 					if ( ! empty( $file_data ) ) : ?>
 
 				<div class="notice notice-info">
-					<p><?php printf( ( ! $single ? __( 'We found %1$d columns and %2$d rows in your file.', 'bulk-create-users' ) : __( 'We found 1 column and %2$d rows in your file', 'bulk-create-users' ) ),
+					<p><?php printf( ( ! $is_single ? __( 'We found %1$d columns and %2$d rows in your file.', 'bulk-create-users' ) : __( 'We found 1 column and %2$d rows in your file', 'bulk-create-users' ) ),
 						$column_count, $row_count
 					); ?></p>
 				</div>
@@ -786,7 +790,7 @@ final class Bulk_Create_Users {
 				<form id="import-settings" method="post" action="">
 
 					<?php // Map columns for multi-column files ?>
-					<?php if ( ! $single ) : $field_options = $this->field_options(); ?>
+					<?php if ( ! $is_single ) : $field_options = $this->field_options(); ?>
 					<table class="widefat striped fixed">
 						<thead>
 							<tr>
@@ -812,14 +816,14 @@ final class Bulk_Create_Users {
 							<td>
 								<input type="checkbox" name="first-row" value="1" id="first-row" />
 								<label for="first-row"><?php 
-									if ( $single ) :
+									if ( $is_single ) :
 										_e( 'Exclude the first row from the import', 'bulk-create-users' );
 									else :
 										_e( 'Include the first row in the import',   'bulk-create-users' );
 									endif;
 								?></label>
 								<p class="description"><?php 
-									if ( $single ) :
+									if ( $is_single ) :
 										_e( 'By default, the first column will be included in the import.',   'bulk-create-users' );
 									else :
 										_e( 'By default, the first column will be excluded from the import.', 'bulk-create-users' );
@@ -828,7 +832,7 @@ final class Bulk_Create_Users {
 							</td>
 						</tr>
 
-						<?php if ( ! $single ) : ?>
+						<?php if ( ! $is_single ) : ?>
 						<tr id="setting-update-existing">
 							<th scope="row"><?php _e( 'Update Existing', 'bulk-create-users' ); ?></th>
 							<td>
