@@ -116,8 +116,7 @@ final class Bulk_Create_Users {
 		add_action( 'network_admin_menu', array( $this, 'admin_menu' ) );
 
 		// After user creation
-		add_action( 'bulk_create_users_new_user', array( $this, 'register_user_for_sites' ), 10, 1 ); // Only pass the first argument
-		add_action( 'bulk_create_users_new_user', array( $this, 'store_user_password'     ), 10, 2 );
+		add_action( 'bulk_create_users_new_user', array( $this, 'store_user_password' ), 10, 2 );
 	}
 
 	/** Public methods **************************************************/
@@ -540,6 +539,9 @@ final class Bulk_Create_Users {
 						wp_update_user( $update_args );
 					}
 
+					// Do user registration for sites
+					$this->register_user_for_sites( $user_id );
+
 					// Walk addittional mapped fields
 					foreach ( array_keys( $data_map ) as $col ) {
 
@@ -853,9 +855,9 @@ final class Bulk_Create_Users {
 										<input type="checkbox" id="register-sites-toggle" onclick="toggle(this)" />
 										<label for="register-sites-toggle" style="color:#aaa;"><?php _e( 'Select/Deselect All', 'bulk-create-users' ); ?></label>
 										<script>
-											function toggle(s) {
-												c = document.getElementsByName('register-sites[]');
-												for(var i=0, n=c.length;i<n;i++) {
+											function toggle( s ) {
+												c = document.getElementsByName( 'register-sites[]' );
+												for ( var i = 0; i < c.length; i++ ) {
 													c[i].checked = s.checked;
 												}
 											}
@@ -941,8 +943,6 @@ final class Bulk_Create_Users {
 										</tr>
 									</table>
 								</div>
-
-
 
 								<style>
 									#setting-notification-email td > input,
