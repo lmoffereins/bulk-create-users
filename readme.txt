@@ -3,7 +3,7 @@ Contributors: Offereins
 Tags: bulk, create, import, upload, users, csv, buddypress, xprofile, groups, multisite
 Requires at least: 4.0
 Tested up to: 4.1
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,6 +26,9 @@ This plugin has various filters to extend its use and add support for other user
 This plugin has out of the box support for Buddypress Member Types, XProfile fields and User Groups.
 
 == Changelog ==
+
+= 1.1.2 =
+* Fixed serious bug when creating usernames
 
 = 1.1.1 =
 * Fixed custom email From and From Name usage
