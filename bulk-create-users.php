@@ -140,10 +140,10 @@ final class Bulk_Create_Users {
 	 * @return mixed Option
 	 */
 	public function get_option( $option, $delete = false ) {
-		$user_id = get_current_user_id();
-		$value = get_user_meta( $user_id, $option, true );		
+		$key = sanitize_key( $option );
+		$value = isset( $_SESSION[ $key ] ) ? $_SESSION[ $key ] : false;
 		if ( $delete ) {
-			delete_user_meta( $user_id, $option );
+			$this->delete_option( $key );
 		}
 		return $value;
 	}
@@ -160,7 +160,8 @@ final class Bulk_Create_Users {
 	 * @return bool Update result
 	 */
 	public function update_option( $option, $value ) {
-		return update_user_meta( get_current_user_id(), $option, $value );		
+		$_SESSION[ sanitize_key( $option ) ] = $value;
+		return true;
 	}
 
 	/**
@@ -174,7 +175,8 @@ final class Bulk_Create_Users {
 	 * @return bool Deletion result
 	 */
 	public function delete_option( $option ) {
-		return delete_user_meta( get_current_user_id(), $option );		
+		unset( $_SESSION[ sanitize_key( $option ) ] );
+		return true;
 	}
 
 	/** Administration **************************************************/
@@ -224,6 +226,9 @@ final class Bulk_Create_Users {
 		$referer = isset( $_REQUEST['_wp_http_referer'] ) ? $_REQUEST['_wp_http_referer'] : add_query_arg( 'page', 'bulk-create-users', self_admin_url( 'users.php' ) );
 		$errors  = new WP_Error();
 		$csv     = null;
+
+		// Start PHP session
+		session_start();
 
 		// Check which submit button is used
 		// Cast $step to string to handle loose comparison
@@ -651,7 +656,7 @@ final class Bulk_Create_Users {
 	 * @uses sanitize_key() 
 	 * @uses add_query_arg()
 	 * @uses self_admin_url()
-	 * @uses Bulk_Create_Users::display_erro_message()
+	 * @uses Bulk_Create_Users::display_error_message()
 	 * @uses get_user_meta()
 	 * @uses wp_nonce_field()
 	 * @uses submit_button()
@@ -907,35 +912,35 @@ final class Bulk_Create_Users {
 
 									<table class="form-table">
 										<tr>
-											<th><?php _e( 'From Name', 'bulk-create-users' ); ?>
+											<th><?php _e( 'From Name', 'bulk-create-users' ); ?></th>
 											<td>
 												<input type="text" class="regular-text" name="notification-email-custom[from_name]" value="<?php echo $settings->from_name; ?>" id="email-custom-from-name" />
 												<p class="description"><label for="email-custom-from-name"><?php _e( 'Define the name of the sender.', 'bulk-create-users' ); ?></label></p>
 											</td>
 										</tr>
 										<tr>
-											<th><?php _e( 'From Address', 'bulk-create-users' ); ?>
+											<th><?php _e( 'From Address', 'bulk-create-users' ); ?></th>
 											<td>
 												<input type="email" class="regular-text" name="notification-email-custom[from]" value="<?php echo $settings->from; ?>" id="email-custom-from" />
 												<p class="description"><label for="email-custom-from"><?php _e( 'Define the email address of the sender.', 'bulk-create-users' ); ?></label></p>
 											</td>
 										</tr>
 										<tr>
-											<th><?php _e( 'Email Subject', 'bulk-create-users' ); ?>
+											<th><?php _e( 'Email Subject', 'bulk-create-users' ); ?></th>
 											<td>
 												<input type="text" class="regular-text" name="notification-email-custom[subject]" value="<?php echo $settings->subject; ?>" id="email-custom-subject" />
 												<p class="description"><label for="email-custom-subject"><?php _e( 'Define the subject of the notification email.', 'bulk-create-users' ); ?></label></p>
 											</td>
 										</tr>
 										<tr>
-											<th><?php _e( 'Email Content', 'bulk-create-users' ); ?>
+											<th><?php _e( 'Email Content', 'bulk-create-users' ); ?></th>
 											<td>
 												<p class="description"><label for="email-custom-content"><?php printf( __( 'Define the content of the notification email. Click <a href="%s">the help tab</a> to view the available variables (i.e. login, password).', 'bulk-create-users' ), '#' ); ?></label></p>
 												<?php wp_editor( $settings->content, 'email-custom-content', array( 'textarea_name' => 'notification-email-custom[content]', 'media_buttons' => false ) ); ?>
 											</td>
 										</tr>
 										<tr>
-											<th><?php _e( 'Login Redirect', 'bulk-create-users' ); ?>
+											<th><?php _e( 'Login Redirect', 'bulk-create-users' ); ?></th>
 											<td>
 												<input type="url" class="regular-text" name="notification-email-custom[redirect]" value="<?php echo $settings->redirect; ?>" id="email-custom-redirect" />
 												<p class="description"><label for="email-custom-redirect"><?php _e( 'When sending the login link: Define the url to which to redirect the user after login.', 'bulk-create-users' ); ?></label></p>
