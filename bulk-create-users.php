@@ -115,6 +115,9 @@ final class Bulk_Create_Users {
 		add_action( 'admin_menu',         array( $this, 'admin_menu' ) );
 		add_action( 'network_admin_menu', array( $this, 'admin_menu' ) );
 
+		// Register ajax process
+		add_action( 'wp_ajax_bulk_create_users_import', array( $this, 'load_admin_page' ) );
+
 		// After user creation
 		add_action( 'bulk_create_users_new_user', array( $this, 'store_user_password' ), 10, 2 );
 	}
@@ -157,10 +160,16 @@ final class Bulk_Create_Users {
 	 * 
 	 * @param string $option Option name
 	 * @param mixed $value New value
+	 * @param bool $merge Whether to merge the given value with the current value
 	 * @return bool Update result
 	 */
-	public function update_option( $option, $value ) {
-		$_SESSION[ sanitize_key( $option ) ] = $value;
+	public function update_option( $option, $value, $merge = false ) {
+		$key = sanitize_key( $option );
+		if ( $merge && isset( $_SESSION[ $key ] ) && is_array( $_SESSION[ $key ] ) ) {
+			$value = array_merge_recursive( $_SESSION[ $key ], $value );
+		}
+
+		$_SESSION[ $key ] = $value;
 		return true;
 	}
 
@@ -265,12 +274,13 @@ final class Bulk_Create_Users {
 					// Use the ReadCSV class
 					require_once( $this->includes_dir . 'class-readcsv.php' );
 
-					// Open the file
-					$csv = new ReadCSV( $file, ',', "\xEF\xBB\xBF" ); // Skip any UTF-8 byte order mark
-
 					// Define csv details
 					$rows = $columns = array();
 					$first = true;
+					$sep = isset( $_REQUEST['sep'] ) ? $_REQUEST['sep'] : ',';
+
+					// Open the file
+					$csv = new ReadCSV( $file, $sep, "\xEF\xBB\xBF" ); // Skip any UTF-8 byte order mark
 					while ( null !== ( $row = $csv->get_row() ) ) {
 
 						// Read first row
@@ -309,7 +319,22 @@ final class Bulk_Create_Users {
 		/**
 		 * Import the uploaded user data
 		 */
+		case 'import-uploaded-data-ajax' :
+
+			// Bail when not accessed properly
+			check_ajax_referer( 'bulk-create-users-import' );
+
+			if ( ! isset( $_SESSION['bulk_create_users_import_start'] ) ) {
+				$_SESSION['bulk_create_users_import_start'] = 0;
+			}
+
+			$ajax_start = $_SESSION['bulk_create_users_import_start'];
+		
 		case 'import-uploaded-data' :
+
+			// Bail when import process was just executed
+			if ( $this->get_option( '_bulk_create_users_imported_users' ) )
+				return;
 
 			// Bail when not accessed properly
 			if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'bulk-create-users-import' ) ) {
@@ -445,6 +470,22 @@ final class Bulk_Create_Users {
 				// Setup collection of created and updated users
 				$created_users = array();
 				$updated_users = array();
+
+				// Define AJAX process
+				if ( defined('DOING_AJAX') && DOING_AJAX ) {
+					$col_count = count( $data_map );
+					$row_count = count( $file_rows );
+					$ajax_len  = null;
+					$per_run   = 50;
+
+					// Process max num items per run
+					if ( ( $col_count * $row_count > $per_run ) || ( empty( $col_count ) && $row_count > $per_run ) ) {
+						$ajax_len = floor( $per_run / $col_count );
+					}
+
+					// Slice rows for next run
+					$file_rows = array_slice( $file_rows, $ajax_start, $ajax_len );
+				}
 
 				// Walk soon-to-be users
 				foreach ( $file_rows as $i => $user_row ) {
@@ -598,6 +639,26 @@ final class Bulk_Create_Users {
 
 			} while ( 0 );
 
+			// Return AJAX response
+			if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+				if ( $errors->get_error_code() ) {
+					wp_send_json_error( $errors );
+				} else {
+					$process = compact( 'created_users', 'updated_users' );
+					$this->update_option( '_bulk_create_users_imported_users', $process, true );
+
+					if ( $row_count > $ajax_start + count( $file_rows ) ) {
+						$_SESSION[ 'bulk_create_users_import_start' ] += $ajax_len;
+						$process['done'] = false;
+					} else {
+						$_SESSION[ 'bulk_create_users_import_start' ] = 0;
+						$process['done'] = true;
+					}
+
+					wp_send_json_success( $process );
+				}
+			}
+
 			break; // import-uploaded-data
 
 		/**
@@ -628,7 +689,7 @@ final class Bulk_Create_Users {
 		endswitch; endif; // step
 
 		// Handle registered errors
-		if ( ( $errcode = $errors->get_error_code() ) && ! empty( $errcode ) ) {
+		if ( $errors->get_error_code() ) {
 
 			// Rewind the import step
 			if ( ! empty( $step ) ) {
@@ -643,8 +704,7 @@ final class Bulk_Create_Users {
 
 		// Remove previous upload attempts and results when restarting
 		if ( empty( $step ) ) {
-			$this->delete_option( '_bulk_create_users_uploaded_file_data' );
-			$this->delete_option( '_bulk_create_users_imported_users'     );
+			session_unset();
 		}
 	}
 
@@ -968,8 +1028,9 @@ final class Bulk_Create_Users {
 					</table>
 
 					<input type="hidden" name="step" value="import-uploaded-data" />
-					<?php wp_nonce_field( 'bulk-create-users-import' ); ?>
-					<?php submit_button( __( 'Import Users', 'bulk-create-users' ), 'primary', 'run-import', false ); ?>
+					<?php // wp_nonce_field( 'bulk-create-users-import' ); ?>
+					<?php // submit_button( __( 'Import Users', 'bulk-create-users' ), 'primary', 'run-import', false ); ?>
+					<input type="button" name="submit" class="button-primary" value="<?php esc_attr_e( 'Import Users', 'bulk-create-users' ); ?>" onclick="bcuimporter_start();" />
 					<span class="spinner"></span>
 				</form>
 
@@ -990,6 +1051,10 @@ final class Bulk_Create_Users {
 							<th scope="row"><?php _e( 'Select a CSV file', 'bulk-create-users' ); ?></th>
 							<td><input type="file" name="file" id="upload" /></td>
 						</tr>
+						<tr>
+							<th scope="row"><?php _e( 'Separator', 'bulk-create-users' ); ?></th>
+							<td><select name="sep"><option value=",">,</option><option value=";">;</option><option value="|">|</option></select></td>
+						</tr>
 					</table>
 
 					<input type="hidden" name="step" value="read-uploaded-file" />
@@ -1001,16 +1066,91 @@ final class Bulk_Create_Users {
 			<?php endswitch; ?>
 
 			<style>
-				.wrap .spinner { float: none; vertical-align: middle; }
-				.wrap.loading .spinner { display: inline-block; }
+				#import-settings .spinner { float: none; }
 				.widefat tbody th:after { font-family: 'Dashicons'; font-size: 18px; content: '\f345'; float: right; }
 			</style>
-			<script>
-				jQuery( '.wrap form' ).on( 'submit', function() {
-					jQuery( '.wrap' ).addClass( 'loading' );
-				});
-			</script>
 
+			<script>
+				var bcuimporter_is_running = false;
+				var bcuimporter_run_timer;
+				var bcuimporter_delay_time = 0;
+				var users = { 'created': [], 'updated': [] };
+				var BCUMessages = <?php echo json_encode( $this->get_messages() ); ?>;
+
+				function bcuimporter_grab_data() {
+					var values = {}, arrayRegExp = /\[(.*?)\]/, i, name;
+					jQuery.each( jQuery( '#import-settings' ).serializeArray(), function(i, field) {
+
+						// Array-like inputs
+						if ( null !== ( i = arrayRegExp.exec( field.name ) ) ) {
+							name = field.name.substr(0, field.name.indexOf('['));
+							if ( ! values[name] ) {
+								values[name] = [];
+							}
+							if ( ! i[1] ) {
+								values[name].push( field.value );
+							} else {
+								values[name][ i[1] ] = field.value;
+							}
+						} else {
+							values[field.name] = field.value;
+						}
+					});
+
+					values['step']     = 'import-uploaded-data-ajax';
+					values['action']   = 'bulk_create_users_import';
+					values['_wpnonce'] = '<?php echo wp_create_nonce( 'bulk-create-users-import' ); ?>';
+
+					return values;
+				}
+
+				function bcuimporter_start() {
+					if ( false == bcuimporter_is_running ) {
+						bcuimporter_is_running = true;
+						jQuery('#import-settings .spinner').addClass('is-active');
+						bcuimporter_run();
+					}
+				}
+
+				function bcuimporter_run() {
+					jQuery.post(ajaxurl, bcuimporter_grab_data(), function(response) {
+						bcuimporter_success(response);
+					});
+				}
+
+				function bcuimporter_stop() {
+					jQuery('#import-settings .spinner').removeClass('is-active');
+					bcuimporter_is_running = false;
+					clearTimeout( bcuimporter_run_timer );
+				}
+
+				function bcuimporter_success(response) {
+					if ( ! response.success ) {
+						bcuimporter_stop();
+						console.log( response );
+						alert( BCUMessages.error[ response.data[0].code ] );
+
+					} else if ( response.data.done ) {
+						bcuimporter_stop();
+						bcuimporter_redirect();
+
+					} else if ( bcuimporter_is_running ) { // keep going
+						users.created.push.apply( users.created, response.data.created_users );
+						users.updated.push.apply( users.updated, response.data.updated_users );
+
+						console.log( users );
+
+						clearTimeout( bcuimporter_run_timer );
+						bcuimporter_run_timer = setTimeout( 'bcuimporter_run()', bcuimporter_delay_time );
+					} else {
+						bcuimporter_stop();
+					}
+				}
+
+				function bcuimporter_redirect() {
+					window.location.replace( '<?php echo esc_url( add_query_arg( 'step', 'import-uploaded-data' ) ); ?>' );
+				}
+			</script>
 		</div>
 
 		<?php
@@ -1158,7 +1298,33 @@ final class Bulk_Create_Users {
 		}
 
 		// Setup messages
-		$messages = array(
+		$messages = $this->get_messages();
+
+		// Output the message
+		if ( ! empty( $code ) && isset( $messages[ $type ][ $code ] ) ) {
+
+			// Get message arguments
+			$args = array_slice( func_get_args(), 2 );
+
+			// Handle nooped plurals
+			if ( is_array( $messages[ $type ][ $code ] ) ) {
+				$messages[ $type ][ $code ] = translate_nooped_plural( $messages[ $type ][ $code ], $args[0] ); // Use first message arg to determine count
+			}
+
+			// Error messages
+			return '<div class="notice notice-' . $type . '"><p>' . vsprintf( $messages[ $type ][ $code ], $args ) . '</p></div>';
+		} 
+	}
+
+	/**
+	 * Return collection of all available messages
+	 *
+	 * @since 1.2.0
+	 * 
+	 * @return array Messages
+	 */
+	public function get_messages() {
+		return array(
 			'info'    => apply_filters( 'bulk_create_users_info_messages', array() ),
 			'error'   => apply_filters( 'bulk_create_users_error_messages', array(
 				'no_file_found'               => __( 'Sorry, we could not find your file.', 'bulk-create-users' ),
@@ -1176,21 +1342,6 @@ final class Bulk_Create_Users {
 				'removed_users'               => __( 'Succesfully removed the recently created users from your installation.', 'bulk-create-users' ),
 			) ),
 		);
-
-		// Output the message
-		if ( ! empty( $code ) && isset( $messages[ $type ][ $code ] ) ) {
-
-			// Get message arguments
-			$args = array_slice( func_get_args(), 2 );
-
-			// Handle nooped plurals
-			if ( is_array( $messages[ $type ][ $code ] ) ) {
-				$messages[ $type ][ $code ] = translate_nooped_plural( $messages[ $type ][ $code ], $args[0] ); // Use first message arg to determine count
-			}
-
-			// Error messages
-			return '<div class="notice notice-' . $type . '"><p>' . vsprintf( $messages[ $type ][ $code ], $args ) . '</p></div>';
-		} 
 	}
 
 	/**
@@ -1302,10 +1453,6 @@ final class Bulk_Create_Users {
 
 		// Walk the given sites
 		foreach ( array_map( 'intval', $sites ) as $site_id ) {
-
-			// User was first registered on the main site
-			if ( is_main_site( $site_id ) )
-				continue;
 
 			// Default to subscriber role
 			add_user_to_blog( $site_id, $user_id, 'subscriber' );
