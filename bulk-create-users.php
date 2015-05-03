@@ -333,7 +333,7 @@ final class Bulk_Create_Users {
 		case 'import-uploaded-data' :
 
 			// Bail when import process was just executed
-			if ( $this->get_option( '_bulk_create_users_imported_users' ) )
+			if ( defined( 'DOING_AJAX' ) && DOING_AJAX && ! $ajax_start && $this->get_option( '_bulk_create_users_imported_users' ) )
 				return;
 
 			// Bail when not accessed properly
@@ -632,7 +632,7 @@ final class Bulk_Create_Users {
 
 				// Temporarily store the created users collection
 				if ( ! empty( $created_users ) || ! empty( $updated_users ) ) {
-					$this->update_option( '_bulk_create_users_imported_users', compact( 'created_users', 'updated_users' ) );
+					$this->update_option( '_bulk_create_users_imported_users', compact( 'created_users', 'updated_users' ), defined( 'DOING_AJAX' ) && DOING_AJAX );
 				} else {
 					$errors->add( 'nothing_changed', '' );
 				}
@@ -645,8 +645,8 @@ final class Bulk_Create_Users {
 					wp_send_json_error( $errors );
 				} else {
 					$process = compact( 'created_users', 'updated_users' );
-					$this->update_option( '_bulk_create_users_imported_users', $process, true );
 
+					// More rows to process
 					if ( $row_count > $ajax_start + count( $file_rows ) ) {
 						$_SESSION[ 'bulk_create_users_import_start' ] += $ajax_len;
 						$process['done'] = false;
@@ -685,6 +685,11 @@ final class Bulk_Create_Users {
 			exit;
 
 			break; // remove-created-users
+
+		case 'after-ajax-import' :
+			if ( ! $this->get_option( '_bulk_create_users_imported_users' ) ) {
+				wp_redirect( $referer );
+			}
 
 		endswitch; endif; // step
 
@@ -760,6 +765,7 @@ final class Bulk_Create_Users {
 				 * Report after creating the users from the file
 				 */
 				case 'import-uploaded-data' :
+				case 'after-ajax-import' :
 
 					// Collect the import data
 					$users         = $this->get_option( '_bulk_create_users_imported_users', true );
@@ -1127,7 +1133,6 @@ final class Bulk_Create_Users {
 				function bcuimporter_success(response) {
 					if ( ! response.success ) {
 						bcuimporter_stop();
-						console.log( response );
 						alert( BCUMessages.error[ response.data[0].code ] );
 
 					} else if ( response.data.done ) {
@@ -1138,8 +1143,6 @@ final class Bulk_Create_Users {
 						users.created.push.apply( users.created, response.data.created_users );
 						users.updated.push.apply( users.updated, response.data.updated_users );
 
-						console.log( users );
-
 						clearTimeout( bcuimporter_run_timer );
 						bcuimporter_run_timer = setTimeout( 'bcuimporter_run()', bcuimporter_delay_time );
 					} else {
@@ -1148,7 +1151,7 @@ final class Bulk_Create_Users {
 				}
 
 				function bcuimporter_redirect() {
-					window.location.replace( '<?php echo esc_url( add_query_arg( 'step', 'import-uploaded-data' ) ); ?>' );
+					window.location.replace( '<?php echo esc_url_raw( add_query_arg( 'step', 'after-ajax-import' ) ); ?>' );
 				}
 			</script>
 		</div>
