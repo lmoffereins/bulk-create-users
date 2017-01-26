@@ -102,6 +102,7 @@ final class Bulk_Create_Users {
 	 * @since 1.0.0
 	 */
 	private function includes() {
+		require ( $this->includes_dir . 'functions.php'  );
 		require ( $this->includes_dir . 'buddypress.php' );
 	}
 
@@ -392,53 +393,6 @@ final class Bulk_Create_Users {
 						// ... and the field name, after the '.'
 						$data_map[ $col ]->field   = substr( $contextfield, strpos( $contextfield, '.' ) + 1 );
 					}
-				}
-
-				// Check custom email settings
-				if ( ! empty( $_REQUEST['notification-email'] ) ) {
-					switch ( $_REQUEST['notification-email'] ) :
-
-						// Default email
-						case 'default' :
-
-							// Hook to send default email
-							add_action( 'bulk_create_users_new_user', 'wp_new_user_notification', 10, 2 );
-							break;
-
-						// Custom email
-						case 'custom' :
-
-							// There were no fields passed
-							if ( ! isset( $_REQUEST['notification-email-custom'] ) ) {
-								$errors->add( 'custom_email_missing_fields', '' );
-								break;
-							}
-
-							// Collect custom email settings
-							$email_settings = array();
-							foreach ( array( 'from_name', 'from', 'subject', 'content', 'redirect' ) as $email_field ) {
-								$value = $_REQUEST['notification-email-custom'][ $email_field ];
-								switch ( $email_field ) {
-									case 'from_name' : $value = strip_tags( $value ); break;
-									case 'from' : $value = sanitize_email( $value ); break;
-									case 'subject' : $value = strip_tags( $value ); break;
-									case 'content' : $value = wpautop( wp_kses( $value, wp_kses_allowed_html() ) ); break;
-									case 'redirect' : $value = esc_url_raw( $value ); break;
-								}
-								if ( empty( $value ) )
-									$value = '';
-
-								$email_settings[ $email_field ] = $value;
-							}
-
-							// Store custom email settings as option for repeated use
-							update_site_option( 'bulk_create_users_custom_email', $email_settings );
-
-							// Hook to send custom email
-							add_action( 'bulk_create_users_new_user', array( $this, 'registration_custom_email' ), 10, 2 );
-							break;
-
-					endswitch;
 				}
 
 				// Setup collection of created and updated users
@@ -1316,10 +1270,7 @@ final class Bulk_Create_Users {
 	/**
 	 * Run the logic for registering a new user
 	 *
-	 * This is our own extended implementation of {@link register_new_user()}. Most
-	 * importantly it removes the wp_new_user_notification() call for later addition
-	 * to the dedicated post-user-creation hook, that uses the user ID and user plain 
-	 * password.
+	 * Exchange user notification email hooks on the fly.
 	 *
 	 * @see register_new_user()
 	 *
@@ -1330,52 +1281,51 @@ final class Bulk_Create_Users {
 	 * @return WP_Error|int Error object or created user ID
 	 */
 	private function register_new_user( $user_login, $user_email ) {
-		$errors = new WP_Error();
 
-		$sanitized_user_login = sanitize_user( $user_login );
-		/** This filter is documented in wp-includes/users.php */
-		$user_email = apply_filters( 'user_registration_email', $user_email );
+		// Get notification type
+		$notification = ! empty( $_REQUEST['notification-email'] ) ? $_REQUEST['notification-email'] : false;
 
-		// Check the username
-		if ( $sanitized_user_login == '' ) {
-			$errors->add( 'empty_username', __( '<strong>ERROR</strong>: Please enter a username.' ) );
-		} elseif ( ! validate_username( $user_login ) ) {
-			$errors->add( 'invalid_username', __( '<strong>ERROR</strong>: This username is invalid because it uses illegal characters. Please enter a valid username.' ) );
-			$sanitized_user_login = '';
-		} elseif ( username_exists( $sanitized_user_login ) ) {
-			$errors->add( 'username_exists', __( '<strong>ERROR</strong>: This username is already registered. Please choose another one.' ) );
+		// Remove the default notification
+		if ( 'default' !== $notification ) {
+			remove_action( 'register_new_user', 'wp_send_new_user_notifications' );
 		}
 
-		// Check the e-mail address
-		if ( $user_email == '' ) {
-			$errors->add( 'empty_email', __( '<strong>ERROR</strong>: Please type your e-mail address.' ) );
-		} elseif ( ! is_email( $user_email ) ) {
-			$errors->add( 'invalid_email', __( '<strong>ERROR</strong>: The email address isn&#8217;t correct.' ) );
-			$user_email = '';
-		} elseif ( email_exists( $user_email ) ) {
-			$errors->add( 'email_exists', __( '<strong>ERROR</strong>: This email is already registered, please choose another one.' ) );
+		// Custom notification, require settings
+		if ( 'custom' === $notification && isset( $_REQUEST['notification-email-custom'] ) ) {
+			add_action( 'register_new_user', 'bcu_send_new_user_notifications' );
+
+			// Collect custom email settings
+			$email_settings = array();
+			foreach ( array( 'from_name', 'from', 'subject', 'content', 'redirect' ) as $email_field ) {
+				$value = $_REQUEST['notification-email-custom'][ $email_field ];
+				switch ( $email_field ) {
+					case 'from_name' : $value = strip_tags( $value ); break;
+					case 'from' : $value = sanitize_email( $value ); break;
+					case 'subject' : $value = strip_tags( $value ); break;
+					case 'content' : $value = wpautop( wp_kses( $value, wp_kses_allowed_html() ) ); break;
+					case 'redirect' : $value = esc_url_raw( $value ); break;
+				}
+				if ( empty( $value ) ) {
+					$value = '';
+				}
+
+				$email_settings[ $email_field ] = $value;
+			}
+
+			// Store custom email settings as option for repeated use
+			update_site_option( 'bulk_create_users_custom_email', $email_settings );
 		}
 
-		/** This action is documented in wp-includes/users.php */
-		do_action( 'register_post', $sanitized_user_login, $user_email, $errors );
+		// Run WP's user registration
+		$user_id = register_new_user( $user_login, $user_email );
 
-		/** This filter is documented in wp-includes/users.php */
-		$errors = apply_filters( 'registration_errors', $errors, $sanitized_user_login, $user_email );
-
-		if ( $errors->get_error_code() )
-			return $errors;
-
-		$user_pass = wp_generate_password( 12, false );
-		$user_id = wp_create_user( $sanitized_user_login, $user_pass, $user_email );
-		if ( ! $user_id || is_wp_error( $user_id ) ) {
-			$errors->add( 'registerfail', sprintf( __( '<strong>ERROR</strong>: Couldn&#8217;t register you&hellip; please contact the <a href="mailto:%s">webmaster</a> !' ), get_option( 'admin_email' ) ) );
-			return $errors;
+		// Reverse (un)hooking
+		if ( 'default' !== $notification ) {
+			add_action( 'register_new_user', 'wp_send_new_user_notifications' );
 		}
-
-		update_user_option( $user_id, 'default_password_nag', true, true ); //Set up the Password change nag.
-
-		// The dedicated after-new-user-creation hook
-		do_action( 'bulk_create_users_new_user', $user_id, $user_pass );
+		if ( 'custom' === $notification ) {
+			remove_action( 'register_new_user', 'bcu_send_new_user_notifications' );
+		}
 
 		return $user_id;
 	}
@@ -1416,53 +1366,6 @@ final class Bulk_Create_Users {
 		if ( $exact && ! in_array( get_current_site()->blog_id, $sites ) ) {
 			remove_user_from_blog( $user_id, get_current_site()->blog_id );
 		}
-	}
-
-	/**
-	 * Send the custom registration notification email
-	 *
-	 * @since 1.1.0
-	 * 
-	 * @param int $user_id User ID
-	 * @param string $user_pass User password
-	 */
-	public function registration_custom_email( $user_id, $user_pass ) {
-		$user = get_userdata( $user_id );
-		$args = apply_filters( 'bulk_create_users_custom_email', wp_parse_args( get_site_option( 'bulk_create_users_custom_email', array() ), array(
-			'from'      => '',
-			'from_name' => '',
-			'subject'   => '',
-			'content'   => '',
-			'redirect'  => ''
-		) ) );
-
-		// Define From: header
-		$headers = array( 'From: "' . $args['from_name'] . '" <' . $args['from'] . '>' );
-
-		// Manual string replacement
-		$content = str_replace( '###USERNAME###', $user->user_login,                 $args['content'] );
-		$content = str_replace( '###PASSWORD###', $user_pass,                        $content         );
-		$content = str_replace( '###LOGINURL###', wp_login_url( $args['redirect'] ), $content         );
-
-		// Set content type
-		add_filter( 'wp_mail_content_type', array( $this, 'wp_mail_html_content_type' ) );
-
-		// Send the notification email
-		wp_mail( $user->user_email, wp_specialchars_decode( $args['subject'], ENT_QUOTES ), $content, $headers );
-
-		// Undo content type
-		remove_filter( 'wp_mail_content_type', array( $this, 'wp_mail_html_content_type' ) );
-	}
-
-	/**
-	 * Return the HTML mail content type
-	 *
-	 * @since 1.1.0
-	 * 
-	 * @return string HTML mail content type
-	 */
-	public function wp_mail_html_content_type() {
-		return 'text/html';
 	}
 }
 
