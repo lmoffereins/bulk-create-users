@@ -49,7 +49,7 @@ function bcu_send_new_user_notifications( $user_id ) {
 
 	// Parse content placeholders
 	$message = str_replace( '###USERNAME###', $user->user_login, $args['content'] );
-	$message = str_replace( '###PASSWORD###', '<' . site_url("wp-login.php?action=rp&key=$key&login=" . rawurlencode($user->user_login), 'login') . ">" );
+	$message = str_replace( '###PASSWORD###', '<' . site_url("wp-login.php?action=rp&key=$key&login=" . rawurlencode($user->user_login), 'login') . ">", $message );
 	$message = str_replace( '###LOGINURL###', wp_login_url( $args['redirect'] ), $message );
 
 	// Define email headers
