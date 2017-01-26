@@ -116,9 +116,6 @@ final class Bulk_Create_Users {
 
 		// Register ajax process
 		add_action( 'wp_ajax_bulk_create_users_import', array( $this, 'load_admin_page' ) );
-
-		// After user creation
-		add_action( 'bulk_create_users_new_user', array( $this, 'store_user_password' ), 10, 2 );
 	}
 
 	/** Public methods **************************************************/
@@ -914,15 +911,6 @@ final class Bulk_Create_Users {
 						</tr>
 						<?php endif; ?>
 
-						<tr id="setting-keep-password">
-							<th scope="row"><?php _e( 'Keep Password', 'bulk-create-users' ); ?></th>
-							<td>
-								<input type="checkbox" name="store-password" value="1" id="store-password" />
-								<label for="store-password"><?php _e( 'On user creation, store the registration password and keep it for later use', 'bulk-create-users' ); ?></label>
-								<p class="description"><?php printf( __( 'The registration password will be stored in the %s user meta field.', 'bulk-create-users' ), '<code>_registration_password</code>' ); ?></p>
-							</td>
-						</tr>
-
 						<tr id="setting-notification-email">
 							<th scope="row"><?php _e( 'Notify New Users', 'bulk-create-users' ); ?></th>
 							<td>
@@ -1475,18 +1463,6 @@ final class Bulk_Create_Users {
 	 */
 	public function wp_mail_html_content_type() {
 		return 'text/html';
-	}
-
-	/**
-	 * Store the new user's password
-	 *
-	 * @since 1.0.0
-	 * 
-	 * @param int $user_id User ID
-	 * @param string $user_pass User password
-	 */
-	public function store_user_password( $user_id, $user_pass ) {
-		update_user_meta( $user_id, '_registration_password', $user_pass );
 	}
 }
 
