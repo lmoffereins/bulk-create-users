@@ -688,12 +688,12 @@ final class Bulk_Create_Users {
 				case 'after-ajax-import' :
 
 					// Collect the import data
-					$users         = $this->get_option( '_bulk_create_users_imported_users', true );
+					$imported      = (array) $this->get_option( '_bulk_create_users_imported_users', true );
 					$created_users = $created_errors = array();
-					$updated_users = $users['updated_users'];
+					$updated_users = $imported['updated_users'];
 
 					// Collect results types
-					foreach ( $users['created_users'] as $i => $user ) {
+					foreach ( (array) $imported['created_users'] as $i => $user ) {
 						if ( ! is_wp_error( $user ) ) {
 							$created_users[ $i ] = $user;
 						} else {
