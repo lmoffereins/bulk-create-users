@@ -1302,7 +1302,7 @@ final class Bulk_Create_Users {
 					case 'from_name' : $value = strip_tags( $value ); break;
 					case 'from' : $value = sanitize_email( $value ); break;
 					case 'subject' : $value = strip_tags( $value ); break;
-					case 'content' : $value = wpautop( wp_kses( $value, wp_kses_allowed_html() ) ); break;
+					case 'content' : $value = wpautop( wp_kses( $value, wp_kses_allowed_html( 'post' ) ) ); break;
 					case 'redirect' : $value = esc_url_raw( $value ); break;
 				}
 				if ( empty( $value ) ) {
