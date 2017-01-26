@@ -21,7 +21,7 @@ defined( 'ABSPATH' ) || exit;
  * @param int $user_id User ID
  */
 function bcu_send_new_user_notifications( $user_id ) {
-	global $wp_hasher;
+	global $wpdb, $wp_hasher;
 	$user = get_userdata( $user_id );
 
 	// Parse email settings
