@@ -16,7 +16,6 @@
  * Version:           1.2.0-beta
  * Author:            Laurens Offereins
  * Author URI:        https://github.com/lmoffereins/
- * Network:           true
  * Text Domain:       bulk-create-users
  * Domain Path:       /languages/
  * GitHub Plugin URI: lmoffereins/bulk-create-users
@@ -186,12 +185,9 @@ final class Bulk_Create_Users {
 	 * Create the plugin's admin menu item
 	 *
 	 * @since 1.0.0
+	 * @since 1.2.0 Removed network-only restriction
 	 */
 	public function admin_menu() {
-
-		// When on MS do not register menu page for single sites
-		if ( is_multisite() && doing_action( 'admin_menu' ) )
-			return;
 
 		// Create menu page
 		$hook = add_submenu_page( 'users.php', __( 'Bulk Create Users', 'bulk-create-users' ), __( 'Bulk Create', 'bulk-create-users' ), 'create_users', 'bulk-create-users', array( $this, 'admin_page' ) );
