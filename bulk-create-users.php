@@ -272,7 +272,7 @@ final class Bulk_Create_Users {
 				} else {
 
 					// Use the ReadCSV class
-					require_once( $this->includes_dir . 'class-readcsv.php' );
+					require_once( $this->includes_dir . 'classes/class-readcsv.php' );
 
 					// Define csv details
 					$rows = $columns = array();
