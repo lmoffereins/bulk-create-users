@@ -1002,7 +1002,7 @@ final class Bulk_Create_Users {
 						if ( null !== ( i = arrayRegExp.exec( field.name ) ) ) {
 							name = field.name.substr(0, field.name.indexOf('['));
 							if ( ! values[name] ) {
-								values[name] = [];
+								values[name] = i[1] ? {} : [];
 							}
 							if ( ! i[1] ) {
 								values[name].push( field.value );
