@@ -133,10 +133,6 @@ final class Bulk_Create_Users {
 	 * Shortcut for returning the given plugin option
 	 *
 	 * @since 1.0.0
-	 *
-	 * @uses get_current_user_id()
-	 * @uses get_user_meta()
-	 * @uses delete_user_meta()
 	 * 
 	 * @param string $option Option name
 	 * @param bool $delete Whether to delete the option immediately after getting it
@@ -155,8 +151,6 @@ final class Bulk_Create_Users {
 	 * Shortcut for updating the given plugin option
 	 *
 	 * @since 1.0.0
-	 *
-	 * @uses update_user_meta()
 	 * 
 	 * @param string $option Option name
 	 * @param mixed $value New value
@@ -177,8 +171,6 @@ final class Bulk_Create_Users {
 	 * Shortcut for deleting the given plugin option
 	 *
 	 * @since 1.0.0
-	 *
-	 * @uses delete_user_meta()
 	 * 
 	 * @param string $option Option name
 	 * @return bool Deletion result
@@ -194,11 +186,6 @@ final class Bulk_Create_Users {
 	 * Create the plugin's admin menu item
 	 *
 	 * @since 1.0.0
-	 *
-	 * @uses is_multisite()
-	 * @uses doing_action()
-	 * @uses add_submenu_page()
-	 * @uses add_action()
 	 */
 	public function admin_menu() {
 
@@ -217,12 +204,6 @@ final class Bulk_Create_Users {
 	 * Run logic before on loading the plugin's admin page
 	 *
 	 * @since 1.0.0
-	 *
-	 * @uses Bulk_Create_Users::update_option()
-	 * @uses Bulk_Create_Users::get_option()
-	 * @uses Bulk_Create_Users::delete_option()
-	 * @uses Bulk_Create_Users::generate_login_from_email()
-	 * @uses Bulk_Create_Users::register_new_user()
 	 */
 	public function load_admin_page() {
 
@@ -717,14 +698,6 @@ final class Bulk_Create_Users {
 	 * Output the plugin's admin page
 	 *
 	 * @since 1.0.0
-	 *
-	 * @uses sanitize_key() 
-	 * @uses add_query_arg()
-	 * @uses self_admin_url()
-	 * @uses Bulk_Create_Users::display_error_message()
-	 * @uses get_user_meta()
-	 * @uses wp_nonce_field()
-	 * @uses submit_button()
 	 */
 	public function admin_page() {
 
@@ -1164,7 +1137,6 @@ final class Bulk_Create_Users {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @uses Bulk_Create_Users::data_fields()
 	 * @return string Option elements
 	 */
 	public function field_options() {
@@ -1241,12 +1213,6 @@ final class Bulk_Create_Users {
 	 * Output the main plugin's feedback message
 	 *
 	 * @since 1.0.0
-	 *
-	 * @uses Bulk_Create_Users::get_option()
-	 * @uses WP_Error::get_error_message()
-	 * @uses WP_Error::get_error_data()
-	 * @uses WP_Error::get_error_code()
-	 * @uses Bulk_Create_Users::get_feedback_message()
 	 */
 	public function display_feedback_message() {
 
@@ -1283,11 +1249,6 @@ final class Bulk_Create_Users {
 	 * Return the given message code's feedback message
 	 *
 	 * @since 1.0.0
-	 *
-	 * @uses apply_filters() Calls 'bulk_create_users_error_messages'
-	 * @uses apply_filters() Calls 'bulk_create_users_success_messages'
-	 * @uses apply_filters() Calls 'bulk_create_users_info_messages'
-	 * @uses translate_nooped_plural()
 	 * 
 	 * @param string $code Message code
 	 * @param string $type Messege type. Either 'error', 'success' or 'info'. Defaults to 'info'
@@ -1323,6 +1284,10 @@ final class Bulk_Create_Users {
 	 * Return collection of all available messages
 	 *
 	 * @since 1.2.0
+	 *
+	 * @uses apply_filters() Calls 'bulk_create_users_error_messages'
+	 * @uses apply_filters() Calls 'bulk_create_users_success_messages'
+	 * @uses apply_filters() Calls 'bulk_create_users_info_messages'
 	 * 
 	 * @return array Messages
 	 */
@@ -1351,9 +1316,6 @@ final class Bulk_Create_Users {
 	 * Return a valid user login from a given email address
 	 *
 	 * @since 1.0.0
-	 *
-	 * @uses sanitize_user()
-	 * @uses username_exists()
 	 * 
 	 * @param string $email Valid email address
 	 * @return string|bool Valid user login or False when the login already exists
@@ -1375,9 +1337,9 @@ final class Bulk_Create_Users {
 	 * to the dedicated post-user-creation hook, that uses the user ID and user plain 
 	 * password.
 	 *
-	 * @since 1.0.0
-	 *
 	 * @see register_new_user()
+	 *
+	 * @since 1.0.0
 	 * 
 	 * @param string $user_login User login name
 	 * @param string $user_email User email address
@@ -1523,8 +1485,6 @@ final class Bulk_Create_Users {
 	 * Store the new user's password
 	 *
 	 * @since 1.0.0
-	 *
-	 * @uses update_user_meta()
 	 * 
 	 * @param int $user_id User ID
 	 * @param string $user_pass User password
