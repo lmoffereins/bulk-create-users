@@ -47,10 +47,17 @@ function bcu_send_new_user_notifications( $user_id ) {
 	$hashed = time() . ':' . $wp_hasher->HashPassword( $key );
 	$wpdb->update( $wpdb->users, array( 'user_activation_key' => $hashed ), array( 'user_login' => $user->user_login ) );
 
+	$message = $args['content'];
+	$placeholders = apply_filters( 'bulk_create_users_email_placeholders', array(
+		'USERNAME' => $user->user_login,
+		'PASSWORD' => '<' . site_url("wp-login.php?action=rp&key=$key&login=" . rawurlencode($user->user_login), 'login') . '>',
+		'LOGINURL' => wp_login_url( $args['redirect'] ),
+	), $user, $args );
+
 	// Parse content placeholders
-	$message = str_replace( '###USERNAME###', $user->user_login, $args['content'] );
-	$message = str_replace( '###PASSWORD###', '<' . site_url("wp-login.php?action=rp&key=$key&login=" . rawurlencode($user->user_login), 'login') . ">", $message );
-	$message = str_replace( '###LOGINURL###', wp_login_url( $args['redirect'] ), $message );
+	foreach ( $placeholders as $variable => $replacement ) {
+		$message = str_replace( "###{$variable}###", $replacement, $message );
+	}
 
 	// Define email headers
 	$headers = array( 'From: "' . $args['from_name'] . '" <' . $args['from'] . '>' );
