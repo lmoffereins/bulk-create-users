@@ -50,7 +50,7 @@ function bcu_send_new_user_notifications( $user_id ) {
 	$message = $args['content'];
 	$placeholders = apply_filters( 'bulk_create_users_email_placeholders', array(
 		'USERNAME' => $user->user_login,
-		'PASSWORD' => '<' . site_url("wp-login.php?action=rp&key=$key&login=" . rawurlencode($user->user_login), 'login') . '>',
+		'PASSWORD' => site_url("wp-login.php?action=rp&key=$key&login=" . rawurlencode($user->user_login), 'login'),
 		'LOGINURL' => wp_login_url( $args['redirect'] ),
 	), $user, $args );
 
