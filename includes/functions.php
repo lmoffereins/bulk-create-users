@@ -17,6 +17,9 @@ defined( 'ABSPATH' ) || exit;
  * @see wp_new_user_notification()
  *
  * @since 1.2.0
+ *
+ * @global $wpdb WPDB
+ * @global $wp_hasher PasswordHash
  * 
  * @param int $user_id User ID
  */
@@ -50,7 +53,7 @@ function bcu_send_new_user_notifications( $user_id ) {
 	$message = $args['content'];
 	$placeholders = apply_filters( 'bulk_create_users_email_placeholders', array(
 		'USERNAME' => $user->user_login,
-		'PASSWORD' => site_url("wp-login.php?action=rp&key=$key&login=" . rawurlencode($user->user_login), 'login'),
+		'PASSWORD' => sprintf( '<a href="%s">%s</a>', esc_url( site_url("wp-login.php?action=rp&key=$key&login=" . rawurlencode($user->user_login), 'login') ), __( 'Klik hier om te activeren', 'bulk-create-users' ) ),
 		'LOGINURL' => wp_login_url( $args['redirect'] ),
 	), $user, $args );
 
