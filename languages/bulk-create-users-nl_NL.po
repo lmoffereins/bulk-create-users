@@ -1,0 +1,381 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Bulk Create Users\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-09-28 15:52+0000\n"
+"PO-Revision-Date: 2018-09-28 16:37+0000\n"
+"Last-Translator: Laurens Offereins <lmoffereins@gmail.com>\n"
+"Language-Team: Nederlands\n"
+"Language: nl_NL\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:523
+msgid "<strong>ERROR</strong>: Could not gerenate a valid user name."
+msgstr "<strong>FOUT</strong>: Kon geen valide gebruikersnaam genereren."
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:828
+msgid ""
+"At least an <strong>email address</strong> is required to be able to setup "
+"your (new) users."
+msgstr ""
+"Er is in ieder geval een <strong>e-mailadres</strong> vereist om (nieuwe) "
+"gebruikers te creëren of bij te werken."
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1172
+msgid "Base Data"
+msgstr "Basisdata"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/includes/extend/buddypress.php:74
+msgid "Buddpress Member Types"
+msgstr "BuddyPress membertypen"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/includes/extend/buddypress.php:95
+msgid "Buddpress XProfile"
+msgstr "BuddyPress profielen"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/includes/extend/buddypress.php:114
+msgid "Buddypress Goups"
+msgstr "BuddyPress groepen"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:238
+msgid "Bulk Create"
+msgstr "Bulkcreëren"
+
+#. Name of the plugin
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:238
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:714
+msgid "Bulk Create Users"
+msgstr "Bulkcreëer gebruikers"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:881
+msgid "By default, existing users (email addresses) will be skipped."
+msgstr "Standaard worden bestaande gebruikers (e-mailadressen) overgeslagen."
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:869
+msgid "By default, the first column will be excluded from the import."
+msgstr "Standaard wordt de eerste kolom uitgesloten bij het importeren."
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:867
+msgid "By default, the first column will be included in the import."
+msgstr "Standaard wordt de eerste kolom meegenomen bij het importeren."
+
+#. Description of the plugin
+msgid "Create/import/update multiple users at once"
+msgstr "Creëer/importeer/update meerdere gebruikers ineens"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:926
+msgid "Custom Email Settings"
+msgstr "Aangepaste e-mailinstellingen"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:838
+msgid "Data Field"
+msgstr "Dataveld"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:962
+#, php-format
+msgid ""
+"Define the content of the notification email. Click <a href=\"%s\">the help "
+"tab</a> to view the available variables (i.e. login, password)."
+msgstr ""
+"Bepaal de inhoud van de notificatie-e-mail. Klik op <a href=\"%s\">de "
+"helptab</a> voor de beschikbare variabelen (bijvoorbeeld login, wachtwoord)."
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:949
+msgid "Define the email address of the sender."
+msgstr "Geef het e-mailadres van de verzender op."
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:942
+msgid "Define the name of the sender."
+msgstr "Geef de naam van de verzender op."
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:956
+msgid "Define the subject of the notification email."
+msgstr "Geef het onderwerp van de notificatie-e-mail op."
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1183
+msgid "Description"
+msgstr "Beschrijving"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1181
+msgid "Display Name"
+msgstr "Schermnaam"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:919
+msgid "Do not send a notification email"
+msgstr "Verzend geen notificatie-e-mail"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1174
+msgid "Email Address"
+msgstr "E-mailadres"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:960
+msgid "Email Content"
+msgstr "E-mailinhoud"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:953
+msgid "Email Subject"
+msgstr "E-mailonderwerp"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:860
+msgid "Exclude the first row from the import"
+msgstr "Sluit de eerste rij uit bij het importeren"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:775
+msgid "Feedback message"
+msgstr "Feedbackbericht"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:837
+msgid "File Column"
+msgstr "Bestandskolom"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1179
+msgid "First Name"
+msgstr "Voornaam"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:855
+msgid "First Row"
+msgstr "Eerste rij"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:946
+msgid "From Address"
+msgstr "Verzendadres"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:939
+msgid "From Name"
+msgstr "Verzendnaam"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/includes/extend/buddypress.php:107
+msgid "Group Slugs"
+msgstr "Groepslugs"
+
+#. Author URI of the plugin
+msgid "https://github.com/lmoffereins/"
+msgstr ""
+
+#. URI of the plugin
+msgid "https://github.com/lmoffereins/bulk-create-users/"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:751
+msgid "Import Results"
+msgstr "Importresultaten"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:826
+msgid "Import Settings"
+msgstr "Importinstellingen"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:997
+msgid "Import Users"
+msgstr "Importeer gebruikers"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:862
+msgid "Include the first row in the import"
+msgstr "Neem de eerste rij mee bij het importeren"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/includes/functions.php:119
+msgid "Klik hier om te activeren"
+msgstr "Klik hier om te activeren"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1180
+msgid "Last Name"
+msgstr "Achternaam"
+
+#. Author of the plugin
+msgid "Laurens Offereins"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1175
+msgid "Login"
+msgstr "Inlognaam"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:967
+msgid "Login Redirect"
+msgstr "Doorsturen na inloggen"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/includes/extend/buddypress.php:67
+msgid "Member Type Keys"
+msgstr "Lidtype sleutels"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1177
+msgid "Nicename"
+msgstr "Nicename"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1182
+msgid "Nickname"
+msgstr "Nickname"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1135
+msgid "Nothing to select"
+msgstr "Niets om te selecteren"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:916
+msgid "Notify New Users"
+msgstr "Stuur nieuwe gebruikers notificatie"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1176
+msgid "Password"
+msgstr "Wachtwoord"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:888
+msgid "Register to Sites"
+msgstr "Registreer bij sites"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:800
+msgid "Remove Created Users"
+msgstr "Verwijder gecreëerde gebruikers"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:718
+msgid "Restart"
+msgstr "Opnieuw"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:774
+msgid "Row number"
+msgstr "Rijnummer"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1015
+msgid "Select a CSV file"
+msgstr "Selecteer een csv-bestand"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1139
+msgid "Select an option"
+msgstr "Selecteer een optie"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:890
+msgid ""
+"Select the sites for which to register the users. Defaults to the main site."
+msgstr ""
+"Selecteer de sites waarop je de gebruikers wilt registreren. Standaard geldt "
+"de hoofdsite."
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:894
+msgid "Select/Deselect All"
+msgstr "Alle (de)selecteren"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:923
+msgid "Send a custom notification email"
+msgstr "Verzend een aangepaste notificatie-e-mail"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:921
+msgid "Send the default WordPress notification emails"
+msgstr "Verzend de standaard WordPress notificatie-e-mail"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1019
+msgid "Separator"
+msgstr "Scheidingsteken"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1289
+msgid "Sorry, all users already exist."
+msgstr "Helaas, alle gebruikers bestaan al."
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1288
+msgid ""
+"Sorry, but we need an email field to register or recognize the users with."
+msgstr ""
+"Helaas, maar we hebben een e-mailveld nodig om gebruikers mee te kunnen "
+"registreren."
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1286
+msgid "Sorry, the data from your file is gone or invalid."
+msgstr "Helaas, maar de data van je bestand is verdwenen of niet juist."
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1287
+msgid "Sorry, the selected data options were incomplete or invalid."
+msgstr "Helaas, de geselecteerde data-opties zijn incompleet of niet juist."
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1285
+msgid ""
+"Sorry, we can only proces single column files if it contains email addresses."
+msgstr ""
+"Helaas, maar we kunnen alleen bestanden met één kolom verwerken als het een "
+"e-mailadres bevat."
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1283
+msgid "Sorry, we could not find your file."
+msgstr "Helaas, maar we konden je bestand niet herkennen."
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1284
+msgid "Sorry, we could not read the uploaded file."
+msgstr "Helaas, maar we konden je bestand niet uitlezen."
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1290
+msgid "Sorry, we did not find any settings for your custom email to be sent."
+msgstr ""
+"Helaas, maar we konden geen instellingen vinden voor het verzenden van de "
+"aangepaste e-mail."
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1010
+msgid "Start Import"
+msgstr "Begin import"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1295
+msgid "Succesfully removed the recently created users from your installation."
+msgstr ""
+"Het verwijderen van recent gecreëerde gebruikers van je site is gelukt."
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1293
+#, php-format
+msgid "Successfully created %d user: %s"
+msgid_plural "Successfully created %d users: %s"
+msgstr[0] "Succesvol %d gebruiker gecreëerd: %s"
+msgstr[1] "Succesvol %d gebruikers gecreëerd: %s"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1294
+#, php-format
+msgid "Successfully updated %d user: %s"
+msgid_plural "Successfully updated %d users: %s"
+msgstr[0] "Succesvol %d gebruiker bijgewerkt: %s"
+msgstr[1] "Succesvol %d gebruikers bijgewerkt: %s"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:877
+msgid "Update Existing"
+msgstr "Bestaande bijwerken"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1026
+msgid "Upload"
+msgstr "Uploaden"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1191
+msgid "Use column title as meta key"
+msgstr "Gebruik kolomtitel als metasleutel"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1189
+msgid "User Meta"
+msgstr "Gebruikersmeta"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:799
+msgid "View Created Users"
+msgstr "Gecreëerde gebruikers bekijken"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:821
+#, php-format
+msgid "We found %1$d columns and %2$d rows in your file."
+msgstr "We hebben in je bestand %1$d kolommen en %2$d rijen gevonden."
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:821
+#, php-format
+msgid "We found 1 column and %2$d rows in your file"
+msgstr "We hebben in je bestand 1 kolom en %2$d rijen gevonden."
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1178
+msgid "Website"
+msgstr "Website"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:970
+msgid ""
+"When sending the login link: Define the url to which to redirect the user "
+"after login."
+msgstr ""
+"Als de loginlink wordt verzonden: geef aan naar welke url de gebruiker moet "
+"worden doorgestuurd na inloggen."
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:880
+msgid "When the email address already exists, update the user"
+msgstr "Werk de gebruiker bij als het e-mailadres reeds bestaat"
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:253
+msgid "You do not have sufficient permissions to access this page."
+msgstr "Je hebt niet voldoende rechten om deze pagina te zien."
