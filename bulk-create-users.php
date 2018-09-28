@@ -87,6 +87,10 @@ final class Bulk_Create_Users {
 		$this->includes_dir = trailingslashit( $this->plugin_dir . 'includes'  );
 		$this->includes_url = trailingslashit( $this->plugin_url . 'includes'  );
 
+		// Extensions
+		$this->extend_dir   = trailingslashit( $this->includes_dir . 'extend' );
+		$this->extend_url   = trailingslashit( $this->includes_url . 'extend' );
+
 		// Languages
 		$this->lang_dir     = trailingslashit( $this->plugin_dir . 'languages' );
 
@@ -103,7 +107,10 @@ final class Bulk_Create_Users {
 	 */
 	private function includes() {
 		require ( $this->includes_dir . 'functions.php'  );
-		require ( $this->includes_dir . 'buddypress.php' );
+
+		/** Extensions ********************************************************/
+
+		require ( $this->extend_dir . 'buddypress.php' );
 	}
 
 	/**
