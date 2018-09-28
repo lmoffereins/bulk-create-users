@@ -37,9 +37,6 @@ final class Bulk_Create_Users {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @uses Bulk_Create_Users::setup_globals()
-	 * @uses Bulk_Create_Users::includes()
-	 * @uses Bulk_Create_Users::setup_actions()
 	 * @return The single Bulk_Create_Users
 	 */
 	public static function instance() {

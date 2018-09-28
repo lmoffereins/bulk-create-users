@@ -22,8 +22,6 @@ final class Bulk_Create_Users_Buddypress {
 	 * Class constructor
 	 *
 	 * @since 1.0.0
-	 *
-	 * @uses Bulk_Create_Users_Buddypress::setup_actions()
 	 */
 	public function __construct() {
 		$this->setup_actions();
@@ -53,11 +51,6 @@ final class Bulk_Create_Users_Buddypress {
 	 * Add Buddypress destination fields to the data options
 	 *
 	 * @since 1.0.0
-	 *
-	 * @uses bp_get_member_types()
-	 * @uses bp_is_active()
-	 * @uses bp_xprofile_get_groups()
-	 * @uses groups_get_groups()
 	 * 
 	 * @param array $fields Data fields
 	 * @return array Data fields
@@ -164,8 +157,6 @@ final class Bulk_Create_Users_Buddypress {
 	 * Handle logic of saving data to Buddypress XProfile fields
 	 *
 	 * @since 1.0.0
-	 *
-	 * @uses xprofile_set_field_data()
 	 * 
 	 * @param string $field_id Selected XProfile field ID
 	 * @param int $user_id User ID
@@ -179,12 +170,6 @@ final class Bulk_Create_Users_Buddypress {
 	 * Handle logic of registering users to Buddypress Groups fields
 	 *
 	 * @since 1.0.0
-	 *
-	 * @uses groups_get_groups()
-	 * @uses groups_join_group()
-	 * @uses groups_get_group()
-	 * @uses bool_from_yn()
-	 * @uses groups_leave_group()
 	 * 
 	 * @param string $group_id Selected group ID
 	 * @param int $user_id User ID
@@ -220,12 +205,11 @@ final class Bulk_Create_Users_Buddypress {
 }
 
 /**
- * Setup Buddypress extension class on 'bp_loaded' action
+ * Initiate the Buddypress extension
  *
  * @since 1.0.0
  * 
- * @return bulk_create_users()
- * @return Bulk_Create_Users_Buddypress
+ * @uses Bulk_Create_Users_Buddypress
  */
 function bulk_create_users_buddypress() {
 	bulk_create_users()->extend->buddypress = new Bulk_Create_Users_Buddypress;
