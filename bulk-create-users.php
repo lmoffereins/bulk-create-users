@@ -71,6 +71,7 @@ final class Bulk_Create_Users {
 		/** Versions **********************************************************/
 
 		$this->version      = '1.1.2';
+		$this->db_version   = 20180928;
 
 		/** Paths *************************************************************/
 
@@ -103,7 +104,8 @@ final class Bulk_Create_Users {
 	 * @since 1.0.0
 	 */
 	private function includes() {
-		require ( $this->includes_dir . 'functions.php'  );
+		require ( $this->includes_dir . 'functions.php' );
+		require ( $this->includes_dir . 'update.php'    );
 
 		/** Extensions ********************************************************/
 
@@ -119,7 +121,10 @@ final class Bulk_Create_Users {
 		add_action( 'admin_menu',         array( $this, 'admin_menu' ) );
 		add_action( 'network_admin_menu', array( $this, 'admin_menu' ) );
 
-		// Register ajax process
+		// Update
+		add_action( 'admin_init', 'bulk_create_users_setup_updater', 999 );
+
+		// Ajax
 		add_action( 'wp_ajax_bulk_create_users_import', array( $this, 'load_admin_page' ) );
 	}
 

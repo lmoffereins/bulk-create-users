@@ -10,6 +10,69 @@
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
+/** Versions ******************************************************************/
+
+/**
+ * Output the plugin version
+ *
+ * @since 1.2.0
+ */
+function bulk_create_users_version() {
+	echo bulk_create_users_get_version();
+}
+
+	/**
+	 * Return the plugin version
+	 *
+	 * @since 1.2.0
+	 *
+	 * @return string The plugin version
+	 */
+	function bulk_create_users_get_version() {
+		return bulk_create_users()->version;
+	}
+
+/**
+ * Output the plugin database version
+ *
+ * @since 1.2.0
+ */
+function bulk_create_users_db_version() {
+	echo bulk_create_users_get_db_version();
+}
+
+	/**
+	 * Return the plugin database version
+	 *
+	 * @since 1.2.0
+	 *
+	 * @return string The plugin version
+	 */
+	function bulk_create_users_get_db_version() {
+		return bulk_create_users()->db_version;
+	}
+
+/**
+ * Output the plugin database version directly from the database
+ *
+ * @since 1.2.0
+ */
+function bulk_create_users_db_version_raw() {
+	echo bulk_create_users_get_db_version_raw();
+}
+
+	/**
+	 * Return the plugin database version directly from the database
+	 *
+	 * @since 1.2.0
+	 *
+	 * @return string The current plugin version
+	 */
+	function bulk_create_users_get_db_version_raw() {
+		return get_option( 'bulk_create_users_db_version', '' );
+	}
+
+/** Email *********************************************************************/
 
 /**
  * Send the custom registration notification email
