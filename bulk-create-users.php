@@ -118,6 +118,11 @@ final class Bulk_Create_Users {
 	 * @since 1.0.0
 	 */
 	private function setup_actions() {
+
+		// Load textdomain
+		add_action( 'plugins_loaded', array( $this, 'load_textdomain' ), 20 );
+
+		// Admin
 		add_action( 'admin_menu',         array( $this, 'admin_menu' ) );
 		add_action( 'network_admin_menu', array( $this, 'admin_menu' ) );
 
@@ -129,6 +134,39 @@ final class Bulk_Create_Users {
 	}
 
 	/** Public methods **************************************************/
+
+	/**
+	 * Load the translation file for current language. Checks the languages
+	 * folder inside the plugin first, and then the default WordPress
+	 * languages folder.
+	 *
+	 * Note that custom translation files inside the plugin folder will be
+	 * removed on plugin updates. If you're creating custom translation
+	 * files, please use the global language folder.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @uses apply_filters() Calls 'plugin_locale' with {@link get_locale()} value
+	 */
+	public function load_textdomain() {
+
+		// Traditional WordPress plugin locale filter
+		$locale        = apply_filters( 'plugin_locale', get_locale(), $this->domain );
+		$mofile        = sprintf( '%1$s-%2$s.mo', $this->domain, $locale );
+
+		// Setup paths to current locale file
+		$mofile_local  = $this->lang_dir . $mofile;
+		$mofile_global = WP_LANG_DIR . '/bulk-create-users/' . $mofile;
+
+		// Look in global /wp-content/languages/bulk-create-users folder
+		load_textdomain( $this->domain, $mofile_global );
+
+		// Look in local /wp-content/plugins/bulk-create-users/languages/ folder
+		load_textdomain( $this->domain, $mofile_local );
+
+		// Look in global /wp-content/languages/plugins/
+		load_plugin_textdomain( $this->domain );
+	}
 
 	/**
 	 * Import sessions are tied to the current user, so session options
