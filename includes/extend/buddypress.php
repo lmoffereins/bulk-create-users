@@ -64,7 +64,7 @@ final class Bulk_Create_Users_Buddypress {
 			$types = bp_get_member_types( array(), 'objects' );
 
 			// Setup options array
-			$options = array();
+			$options = array( 0 => esc_html__( 'Member Type Keys', 'bulk-create-users' ) );
 			foreach ( $types as $member_type ) {
 				$options[ $member_type->name ] = $member_type->labels['singular_name'];
 			}
@@ -124,31 +124,33 @@ final class Bulk_Create_Users_Buddypress {
 	 *
 	 * @since 1.1.0
 	 *
-	 * @uses bp_get_member_type_object()
-	 * @uses bool_from_yn()
-	 * @uses bp_set_member_type()
-	 * @uses bp_get_member_type()
-	 * @uses bp_set_object_terms()
-	 *
 	 * @param string $member_type Selected Member Type name
 	 * @param int $user_id User ID
 	 * @param string $value Uploaded field value
 	 */
 	public function import_member_types( $member_type, $user_id, $value ) {
 
-		// Member Type exists
-		if ( bp_get_member_type_object( $member_type ) ) {
+		// Member Type by key
+		if ( '0' === $member_type ) {
 
-			// Add or remove based on boolean value
+			// Get member types from value, comma separated
+			$member_types = array_filter( array_map( 'trim', array_map( 'sanitize_key', explode( ',', $value ) ) ), 'bp_get_member_type_object' );
+
+			// Walk member types, overwrite existing assignments
+			foreach ( $member_types as $member_type ) {
+				bp_set_member_type( $user_id, $member_type, true );
+			}
+
+		// Member Type exists
+		} elseif ( bp_get_member_type_object( $member_type ) ) {
+
+			// Add member type from user based on boolean result ('1' or 'y')
 			if ( ( is_numeric( $value ) && (bool) $value ) || bool_from_yn( $value ) ) {
 				bp_set_member_type( $user_id, $member_type, true );
-			} else {
-				$retval = bp_set_object_terms( $user_id, array_diff( (array) bp_get_member_type( $user_id, false ), array( $member_type ) ), 'bp_member_type' );
 
-				// Bust the cache if the type has been updated.
-				if ( ! is_wp_error( $retval ) ) {
-					wp_cache_delete( $user_id, 'bp_member_type' );
-				}
+			// Remove member type from user
+			} else {
+				bp_remove_member_type( $user_id, $member_type );
 			}
 		}
 	}
@@ -194,9 +196,11 @@ final class Bulk_Create_Users_Buddypress {
 		// Single group exists
 		} elseif ( is_numeric( $group_id ) && groups_get_group( array( 'group_id' => (int) $group_id ) ) instanceof BP_Groups_Group ) {
 
-			// Join or leave based on boolean value
+			// Join group based on boolean result ('1' or 'y')
 			if ( ( is_numeric( $value ) && (bool) $value ) || bool_from_yn( $value ) ) {
 				groups_join_group( (int) $group_id, $user_id );
+
+			// Leave group
 			} else {
 				groups_leave_group( (int) $group_id, $user_id );
 			}
