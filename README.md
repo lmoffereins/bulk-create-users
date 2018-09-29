@@ -18,7 +18,7 @@ The default import settings contain:
 
 This plugin has various filters to extend its use and add support for other user data fields.
 
-This plugin has out of the box support for Buddypress Member Types, XProfile fields and User Groups.
+This plugin has out of the box support for Buddypress Member Types, XProfile fields and User Groups. Requires at least [BuddyPress](https://buddypress.org) 2.3.
 
 ## Installation ##
 

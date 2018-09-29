@@ -1,8 +1,8 @@
 === Bulk Create Users ===
 Contributors: Offereins
 Tags: bulk, create, import, upload, users, csv, buddypress, xprofile, groups, multisite
-Requires at least: 4.0
-Tested up to: 4.1
+Requires at least: 4.0, BP 2.3
+Tested up to: 4.9.8, BP 3.2
 Stable tag: 1.2.0-beta
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -23,13 +23,15 @@ The default import settings contain:
 
 This plugin has various filters to extend its use and add support for other user data fields.
 
-This plugin has out of the box support for Buddypress Member Types, XProfile fields and User Groups.
+This plugin has out of the box support for Buddypress Member Types, XProfile fields and User Groups. Requires at least BuddyPress 2.3.
 
 == Changelog ==
 
 = 1.2.0 =
 * Moved to ajaxified import procedure
 * Added PHP sessions to enable larger data files
+* Added support for setting BuddyPress Member Types by key
+* Added Dutch translation
 
 = 1.1.2 =
 * Fixed serious bug when creating usernames
