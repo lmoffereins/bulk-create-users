@@ -996,6 +996,7 @@ final class Bulk_Create_Users {
 					<?php // submit_button( __( 'Import Users', 'bulk-create-users' ), 'primary', 'run-import', false ); ?>
 					<input type="button" name="submit" class="button-primary" value="<?php esc_attr_e( 'Import Users', 'bulk-create-users' ); ?>" onclick="bcuimporter_start();" />
 					<span class="spinner"></span>
+					<span class="feedback-message"></span>
 				</form>
 
 						<?php
@@ -1040,6 +1041,7 @@ final class Bulk_Create_Users {
 				var bcuimporter_delay_time = 0;
 				var users = { 'created': [], 'updated': [] };
 				var BCUMessages = <?php echo json_encode( $this->get_messages() ); ?>;
+				var message = '<?php esc_html_e( 'Imported %d rows', 'bulk-create-users' ); ?>';
 
 				function bcuimporter_grab_data() {
 					var values = {}, arrayRegExp = /\[(.*?)\]/, i, name;
@@ -1069,9 +1071,10 @@ final class Bulk_Create_Users {
 				}
 
 				function bcuimporter_start() {
-					if ( false == bcuimporter_is_running ) {
+					if ( false === bcuimporter_is_running ) {
 						bcuimporter_is_running = true;
 						jQuery('#import-settings .spinner').addClass('is-active');
+						bcuimporter_feedback_message( '<?php esc_html_e( 'Started importing', 'bulk-create-users' ); ?>' );
 						bcuimporter_run();
 					}
 				}
@@ -1082,30 +1085,37 @@ final class Bulk_Create_Users {
 					});
 				}
 
-				function bcuimporter_stop() {
+				function bcuimporter_stop(forced) {
 					jQuery('#import-settings .spinner').removeClass('is-active');
+					forced && bcuimporter_feedback_message( '<?php esc_html_e( 'Stopped importing', 'bulk-create-users' ); ?>' );
 					bcuimporter_is_running = false;
 					clearTimeout( bcuimporter_run_timer );
 				}
 
 				function bcuimporter_success(response) {
 					if ( ! response.success ) {
-						bcuimporter_stop();
+						bcuimporter_stop(true);
 						alert( BCUMessages.error[ response.data[0].code ] );
 
 					} else if ( response.data.done ) {
+						bcuimporter_feedback_message( '<?php esc_html_e( 'Importing succesfull', 'bulk-create-users' ); ?>' );
 						bcuimporter_stop();
 						bcuimporter_redirect();
 
 					} else if ( bcuimporter_is_running ) { // keep going
 						users.created.push.apply( users.created, response.data.created_users );
 						users.updated.push.apply( users.updated, response.data.updated_users );
+						bcuimporter_feedback_message( message.replace( '%d', users.created.length + users.updated.length ) );
 
 						clearTimeout( bcuimporter_run_timer );
 						bcuimporter_run_timer = setTimeout( 'bcuimporter_run()', bcuimporter_delay_time );
 					} else {
-						bcuimporter_stop();
+						bcuimporter_stop(true);
 					}
+				}
+
+				function bcuimporter_feedback_message(message) {
+					jQuery('#import-settings .feedback-message').text( message );
 				}
 
 				function bcuimporter_redirect() {
