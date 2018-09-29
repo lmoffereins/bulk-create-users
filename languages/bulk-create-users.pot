@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Bulk Create Users\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-28 15:52+0000\n"
+"POT-Creation-Date: 2018-09-29 09:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -14,328 +14,46 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Loco https://localise.biz/"
 
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:523
-msgid "<strong>ERROR</strong>: Could not gerenate a valid user name."
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:828
-msgid ""
-"At least an <strong>email address</strong> is required to be able to setup "
-"your (new) users."
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1172
-msgid "Base Data"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/includes/extend/buddypress.php:74
-msgid "Buddpress Member Types"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/includes/extend/buddypress.php:95
-msgid "Buddpress XProfile"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/includes/extend/buddypress.php:114
-msgid "Buddypress Goups"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:238
-msgid "Bulk Create"
-msgstr ""
-
 #. Name of the plugin
 #: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:238
 #: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:714
 msgid "Bulk Create Users"
 msgstr ""
 
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:881
-msgid "By default, existing users (email addresses) will be skipped."
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:238
+msgid "Bulk Create"
 msgstr ""
 
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:869
-msgid "By default, the first column will be excluded from the import."
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:253
+msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:867
-msgid "By default, the first column will be included in the import."
-msgstr ""
-
-#. Description of the plugin
-msgid "Create/import/update multiple users at once"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:926
-msgid "Custom Email Settings"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:838
-msgid "Data Field"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:962
-#, php-format
-msgid ""
-"Define the content of the notification email. Click <a href=\"%s\">the help "
-"tab</a> to view the available variables (i.e. login, password)."
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:949
-msgid "Define the email address of the sender."
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:942
-msgid "Define the name of the sender."
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:956
-msgid "Define the subject of the notification email."
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1183
-msgid "Description"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1181
-msgid "Display Name"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:919
-msgid "Do not send a notification email"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1174
-msgid "Email Address"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:960
-msgid "Email Content"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:953
-msgid "Email Subject"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:860
-msgid "Exclude the first row from the import"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:775
-msgid "Feedback message"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:837
-msgid "File Column"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1179
-msgid "First Name"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:855
-msgid "First Row"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:946
-msgid "From Address"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:939
-msgid "From Name"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/includes/extend/buddypress.php:107
-msgid "Group Slugs"
-msgstr ""
-
-#. Author URI of the plugin
-msgid "https://github.com/lmoffereins/"
-msgstr ""
-
-#. URI of the plugin
-msgid "https://github.com/lmoffereins/bulk-create-users/"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:751
-msgid "Import Results"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:826
-msgid "Import Settings"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:997
-msgid "Import Users"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:862
-msgid "Include the first row in the import"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/includes/functions.php:119
-msgid "Klik hier om te activeren"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1180
-msgid "Last Name"
-msgstr ""
-
-#. Author of the plugin
-msgid "Laurens Offereins"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1175
-msgid "Login"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:967
-msgid "Login Redirect"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/includes/extend/buddypress.php:67
-msgid "Member Type Keys"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1177
-msgid "Nicename"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1182
-msgid "Nickname"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1135
-msgid "Nothing to select"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:916
-msgid "Notify New Users"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1176
-msgid "Password"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:888
-msgid "Register to Sites"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:800
-msgid "Remove Created Users"
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:523
+msgid "<strong>ERROR</strong>: Could not gerenate a valid user name."
 msgstr ""
 
 #: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:718
 msgid "Restart"
 msgstr ""
 
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:751
+msgid "Import Results"
+msgstr ""
+
 #: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:774
 msgid "Row number"
 msgstr ""
 
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1015
-msgid "Select a CSV file"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1139
-msgid "Select an option"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:890
-msgid ""
-"Select the sites for which to register the users. Defaults to the main site."
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:894
-msgid "Select/Deselect All"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:923
-msgid "Send a custom notification email"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:921
-msgid "Send the default WordPress notification emails"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1019
-msgid "Separator"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1289
-msgid "Sorry, all users already exist."
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1288
-msgid ""
-"Sorry, but we need an email field to register or recognize the users with."
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1286
-msgid "Sorry, the data from your file is gone or invalid."
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1287
-msgid "Sorry, the selected data options were incomplete or invalid."
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1285
-msgid ""
-"Sorry, we can only proces single column files if it contains email addresses."
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1283
-msgid "Sorry, we could not find your file."
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1284
-msgid "Sorry, we could not read the uploaded file."
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1290
-msgid "Sorry, we did not find any settings for your custom email to be sent."
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1010
-msgid "Start Import"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1295
-msgid "Succesfully removed the recently created users from your installation."
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1293
-#, php-format
-msgid "Successfully created %d user: %s"
-msgid_plural "Successfully created %d users: %s"
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1294
-#, php-format
-msgid "Successfully updated %d user: %s"
-msgid_plural "Successfully updated %d users: %s"
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:877
-msgid "Update Existing"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1026
-msgid "Upload"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1191
-msgid "Use column title as meta key"
-msgstr ""
-
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1189
-msgid "User Meta"
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:775
+msgid "Feedback message"
 msgstr ""
 
 #: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:799
 msgid "View Created Users"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:800
+msgid "Remove Created Users"
 msgstr ""
 
 #: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:821
@@ -348,8 +66,126 @@ msgstr ""
 msgid "We found 1 column and %2$d rows in your file"
 msgstr ""
 
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1178
-msgid "Website"
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:826
+msgid "Import Settings"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:828
+msgid ""
+"At least an <strong>email address</strong> is required to be able to setup "
+"your (new) users."
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:837
+msgid "File Column"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:838
+msgid "Data Field"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:855
+msgid "First Row"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:860
+msgid "Exclude the first row from the import"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:862
+msgid "Include the first row in the import"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:867
+msgid "By default, the first column will be included in the import."
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:869
+msgid "By default, the first column will be excluded from the import."
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:877
+msgid "Update Existing"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:880
+msgid "When the email address already exists, update the user"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:881
+msgid "By default, existing users (email addresses) will be skipped."
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:888
+msgid "Register to Sites"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:890
+msgid ""
+"Select the sites for which to register the users. Defaults to the main site."
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:894
+msgid "Select/Deselect All"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:916
+msgid "Notify New Users"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:919
+msgid "Do not send a notification email"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:921
+msgid "Send the default WordPress notification emails"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:923
+msgid "Send a custom notification email"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:926
+msgid "Custom Email Settings"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:939
+msgid "From Name"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:942
+msgid "Define the name of the sender."
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:946
+msgid "From Address"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:949
+msgid "Define the email address of the sender."
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:953
+msgid "Email Subject"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:956
+msgid "Define the subject of the notification email."
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:960
+msgid "Email Content"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:962
+#, php-format
+msgid ""
+"Define the content of the notification email. Click <a href=\"%s\">the help "
+"tab</a> to view the available variables (i.e. login, password)."
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:967
+msgid "Login Redirect"
 msgstr ""
 
 #: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:970
@@ -358,10 +194,191 @@ msgid ""
 "after login."
 msgstr ""
 
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:880
-msgid "When the email address already exists, update the user"
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:997
+msgid "Import Users"
 msgstr ""
 
-#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:253
-msgid "You do not have sufficient permissions to access this page."
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1011
+msgid "Start Import"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1016
+msgid "Select a CSV file"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1020
+msgid "Separator"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1027
+msgid "Upload"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1044
+#, php-format
+msgid "Imported %d rows"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1077
+msgid "Started importing"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1090
+msgid "Stopped importing"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1101
+msgid "Importing succesfull"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1145
+msgid "Nothing to select"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1149
+msgid "Select an option"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1182
+msgid "Base Data"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1184
+msgid "Email Address"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1185
+msgid "Login"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1186
+msgid "Password"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1187
+msgid "Nicename"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1188
+msgid "Website"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1189
+msgid "First Name"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1190
+msgid "Last Name"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1191
+msgid "Display Name"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1192
+msgid "Nickname"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1193
+msgid "Description"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1199
+msgid "User Meta"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1201
+msgid "Use column title as meta key"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1293
+msgid "Sorry, we could not find your file."
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1294
+msgid "Sorry, we could not read the uploaded file."
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1295
+msgid ""
+"Sorry, we can only proces single column files if it contains email addresses."
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1296
+msgid "Sorry, the data from your file is gone or invalid."
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1297
+msgid "Sorry, the selected data options were incomplete or invalid."
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1298
+msgid ""
+"Sorry, but we need an email field to register or recognize the users with."
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1299
+msgid "Sorry, all users already exist."
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1300
+msgid "Sorry, we did not find any settings for your custom email to be sent."
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1303
+#, php-format
+msgid "Successfully created %d user: %s"
+msgid_plural "Successfully created %d users: %s"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1304
+#, php-format
+msgid "Successfully updated %d user: %s"
+msgid_plural "Successfully updated %d users: %s"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/bulk-create-users.php:1305
+msgid "Succesfully removed the recently created users from your installation."
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/includes/functions.php:119
+msgid "Klik hier om te activeren"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/includes/extend/buddypress.php:67
+msgid "Member Type Keys"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/includes/extend/buddypress.php:74
+msgid "Buddpress Member Types"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/includes/extend/buddypress.php:95
+msgid "Buddpress XProfile"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/includes/extend/buddypress.php:107
+msgid "Group Slugs"
+msgstr ""
+
+#: ../../../../src/wp-content/plugins/bulk-create-users/includes/extend/buddypress.php:114
+msgid "Buddypress Goups"
+msgstr ""
+
+#. Description of the plugin
+msgid "Create/import/update multiple users at once"
+msgstr ""
+
+#. URI of the plugin
+msgid "https://github.com/lmoffereins/bulk-create-users/"
+msgstr ""
+
+#. Author of the plugin
+msgid "Laurens Offereins"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://github.com/lmoffereins/"
 msgstr ""
