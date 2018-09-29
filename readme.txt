@@ -3,7 +3,7 @@ Contributors: Offereins
 Tags: bulk, create, import, upload, users, csv, buddypress, xprofile, groups, multisite
 Requires at least: 4.0, BP 2.3
 Tested up to: 4.9.8, BP 3.2
-Stable tag: 1.2.0-beta
+Stable tag: 1.2.0
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
