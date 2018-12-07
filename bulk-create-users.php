@@ -591,7 +591,7 @@ final class Bulk_Create_Users {
 								 * 
 								 * The dynamic portion of the hook name, `$field->context`, refers to the
 								 * context name of the current processed field. This is the context under
-								 * which the field is registered in Bulk_Create_Users::data_fields().
+								 * which the field is registered in bulk_create_users_data_fields().
 								 *
 								 * @since 1.0.0
 								 *
@@ -1137,7 +1137,7 @@ final class Bulk_Create_Users {
 	public function field_options() {
 
 		// Get data options
-		$options = $this->data_fields();
+		$options = bulk_create_users_data_fields();
 		$opts    = '';
 
 		// No data options 
@@ -1164,44 +1164,6 @@ final class Bulk_Create_Users {
 		}
 
 		return $opts;
-	}
-
-	/**
-	 * Return a collection of data options
-	 *
-	 * @since 1.0.0
-	 *
-	 * @uses apply_filters() Calls 'bulk_create_users_data_fields'
-	 * @return array Data map
-	 */
-	public function data_fields() {
-		return (array) apply_filters( 'bulk_create_users_data_fields', array(
-
-			// Context: Base user data handled by wp_update_user()
-			'users' => array(
-				'label'   => __( 'Base Data', 'bulk-create-users' ),
-				'options' => array(
-					'user_email'      => __( 'Email Address', 'bulk-create-users' ) . '*', // Key
-					'user_login'      => __( 'Login',         'bulk-create-users' ),
-					'user_pass'       => __( 'Password',      'bulk-create-users' ),
-					'user_nicename'   => __( 'Nicename',      'bulk-create-users' ),
-					'user_url'        => __( 'Website',       'bulk-create-users' ),
-					'first_name'      => __( 'First Name',    'bulk-create-users' ),
-					'last_name'       => __( 'Last Name',     'bulk-create-users' ),
-					'display_name'    => __( 'Display Name',  'bulk-create-users' ),
-					'nickname'        => __( 'Nickname',      'bulk-create-users' ),
-					'description'     => __( 'Description',   'bulk-create-users' ),
-				)
-			),
-
-			// Context: User meta fields
-			'usermeta' => array(
-				'label'   => __( 'User Meta', 'bulk-create-users' ),
-				'options' => array(
-					'usermeta'        => __( 'Use column title as meta key', 'bulk-create-users' ),
-				)
-			),
-		) );
 	}
 
 	/**
