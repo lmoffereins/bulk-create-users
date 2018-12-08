@@ -416,6 +416,7 @@ final class Bulk_Create_Users {
 
 					// Get the provided data map
 					$_data_map = $_REQUEST['map_to'];
+					$sep_map = isset( $_REQUEST['separator'] ) ? $_REQUEST['separator'] : array();
 
 					// Report error when missing the required email field to identify the user with
 					if ( ! in_array( 'users.user_email', $_data_map ) ) {
@@ -569,6 +570,12 @@ final class Bulk_Create_Users {
 						// Define this row & column's specific params
 						$field = $data_map[ $col ];
 						$input = trim( $user_row[ $col ] );
+						$separator = trim( $sep_map[ $col ] );
+
+						// Split data on separator to create an array
+						if ( ! empty( $separator ) ) {
+							$input = explode( $separator, $input );
+						}
 
 						// Check the field's context
 						switch ( $field->context ) {
@@ -581,7 +588,19 @@ final class Bulk_Create_Users {
 							case 'usermeta' :
 
 								// Use column title as meta key or use the map's field
-								update_user_meta( $user_id, ( 'usermeta' == $field->field ) ? $file_columns[ $col ] : $field->field, $input );
+								$meta_key = ( 'usermeta' == $field->field ) ? $file_columns[ $col ] : $field->field;
+
+								// Process array data: remove previous values, add new ones
+								if ( is_array( $input ) ) {
+									delete_user_meta( $user_id, $meta_key );
+									foreach ( $input as $value ) {
+										add_user_meta( $user_id, $meta_key, $value );
+									}
+
+								// Process single data: overwrite existing value
+								} else {
+									update_user_meta( $user_id, $meta_key, $input );
+								}
 								break;
 
 							// Provide hook for custom field saving
@@ -595,9 +614,10 @@ final class Bulk_Create_Users {
 								 *
 								 * @since 1.0.0
 								 *
-								 * @param string $field   Field name to process.
-								 * @param int    $user_id User ID of the imported user.
-								 * @param string $input   Provided input value.
+								 * @param string       $field     Field name to process.
+								 * @param int          $user_id   User ID of the imported user.
+								 * @param string|array $input     Provided input value.
+								 * @param string       $separator Separator token.
 								 */
 								do_action( "bulk_create_users_import_{$field->context}", $field->field, $user_id, $input );
 								break;
@@ -841,8 +861,13 @@ final class Bulk_Create_Users {
 						<tbody>
 							<?php foreach ( $file_data['columns'] as $column => $name ) : ?>
 							<tr>
-								<th scope="row"><?php echo $name; ?></th>
-								<td><select name="map_to[<?php echo esc_attr( strtolower( $column ) ); ?>]"><?php echo $field_options; ?></select></td>
+								<th class="file-column" scope="row"><?php echo $name; ?></th>
+								<td class="data-field">
+									<div class="data-field-wrapper">
+										<select name="map_to[<?php echo esc_attr( strtolower( $column ) ); ?>]"><?php echo $field_options; ?></select>
+										<input name="separator[<?php echo esc_attr( strtolower( $column ) ); ?>]" value="" placeholder="<?php esc_html_e( 'Separator', 'bulk-create-users' ); ?>" class="small-text">
+									</div>
+								</td>
 							</tr>
 							<?php endforeach; ?>
 						</tbody>

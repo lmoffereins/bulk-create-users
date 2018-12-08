@@ -126,7 +126,7 @@ final class Bulk_Create_Users_Buddypress {
 	 *
 	 * @param string $member_type Selected Member Type name
 	 * @param int $user_id User ID
-	 * @param string $value Uploaded field value
+	 * @param string|array $value Uploaded field value
 	 */
 	public function import_member_types( $member_type, $user_id, $value ) {
 
@@ -134,7 +134,7 @@ final class Bulk_Create_Users_Buddypress {
 		if ( '0' === $member_type ) {
 
 			// Get member types from value, comma separated
-			$member_types = array_filter( array_map( 'trim', array_map( 'sanitize_key', explode( ',', $value ) ) ), 'bp_get_member_type_object' );
+			$member_types = array_filter( array_map( 'trim', array_map( 'sanitize_key', (array) $value ) ), 'bp_get_member_type_object' );
 
 			// Walk member types, overwrite existing assignments
 			foreach ( $member_types as $member_type ) {
@@ -162,7 +162,7 @@ final class Bulk_Create_Users_Buddypress {
 	 * 
 	 * @param string $field_id Selected XProfile field ID
 	 * @param int $user_id User ID
-	 * @param string $value Uploaded field value
+	 * @param string|array $value Uploaded field value
 	 */
 	public function import_xprofile( $field_id, $user_id, $value ) {
 		xprofile_set_field_data( $field_id, $user_id, $value );
@@ -175,13 +175,13 @@ final class Bulk_Create_Users_Buddypress {
 	 * 
 	 * @param string $group_id Selected group ID
 	 * @param int $user_id User ID
-	 * @param string $value Uploaded field value
+	 * @param string|array $value Uploaded field value
 	 */
 	public function import_groups( $group_id, $user_id, $value ) {
 
 		// Collect group slugs
 		if ( '0' === $group_id && ! empty( $value ) ) {
-			$slugs = array_map( 'trim', array_map( 'sanitize_key', explode( ',', $value ) ) );
+			$slugs = array_map( 'trim', array_map( 'sanitize_key', (array) $value ) );
 
 			// Walk all groups
 			$groups = groups_get_groups( array( 'show_hidden' => true, 'populate_extras' => false, 'per_page' => false ) );
