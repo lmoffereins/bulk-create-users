@@ -235,7 +235,7 @@ final class Bulk_Create_Users {
 	public function admin_menu() {
 
 		// Create menu page
-		$hook = add_submenu_page( 'users.php', __( 'Bulk Create Users', 'bulk-create-users' ), __( 'Bulk Create', 'bulk-create-users' ), 'create_users', 'bulk-create-users', array( $this, 'admin_page' ) );
+		$hook = add_submenu_page( 'users.php', esc_html__( 'Bulk Create Users', 'bulk-create-users' ), esc_html__( 'Bulk Create', 'bulk-create-users' ), 'create_users', 'bulk-create-users', array( $this, 'admin_page' ) );
 
 		// Add load hook
 		add_action( "load-$hook", array( $this, 'load_admin_page' ) );
@@ -250,7 +250,7 @@ final class Bulk_Create_Users {
 
 		// Bail when user is not capable
 		if ( ! current_user_can( 'create_users' ) )
-			wp_die( __( 'You do not have sufficient permissions to access this page.' , 'bulk-create-users' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.' , 'bulk-create-users' ) );
 
 		// Define local variable(s)
 		$step    = isset( $_REQUEST['step'] ) ? $_REQUEST['step'] : 0;
@@ -711,11 +711,11 @@ final class Bulk_Create_Users {
 		} ?>
 
 		<div class="wrap">
-			<h2><?php _e( 'Bulk Create Users', 'bulk-create-users' );
+			<h2><?php esc_html_e( 'Bulk Create Users', 'bulk-create-users' );
 
 				// Restart button
 				if ( $step ) {
-					echo ' <a class="add-new-h2" href="' . add_query_arg( 'page', 'bulk-create-users', self_admin_url( 'users.php' ) ) . '">' . __( 'Restart', 'bulk-create-users' ) . '</a>';
+					echo ' <a class="add-new-h2" href="' . add_query_arg( 'page', 'bulk-create-users', self_admin_url( 'users.php' ) ) . '">' . esc_html__( 'Restart', 'bulk-create-users' ) . '</a>';
 				}
 			?></h2>
 
@@ -748,7 +748,7 @@ final class Bulk_Create_Users {
 						}
 					} ?>
 
-				<h3><?php _e( 'Import Results', 'bulk-create-users' ); ?></h3>
+				<h3><?php esc_html_e( 'Import Results', 'bulk-create-users' ); ?></h3>
 
 					<?php // Display created and updated messages ?>
 					<?php foreach ( array( 'created_users', 'updated_users' ) as $users ) :
@@ -771,8 +771,8 @@ final class Bulk_Create_Users {
 				<table class="widefat striped fixed">
 					<thead>
 						<tr>
-							<th scope="col"><?php _e( 'Row number',       'bulk-create-users' ); ?></th>
-							<th scope="col"><?php _e( 'Feedback message', 'bulk-create-users' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Row number',       'bulk-create-users' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Feedback message', 'bulk-create-users' ); ?></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -796,8 +796,8 @@ final class Bulk_Create_Users {
 					<?php wp_nonce_field( 'bulk-create-users-remove' ); ?>
 
 					<p class="submit">
-						<a class="button button-primary" href="<?php echo add_query_arg( array( 'orderby' => 'id', 'order' => 'desc' ), self_admin_url( 'users.php' ) ); ?>"><?php _e( 'View Created Users', 'bulk-create-users' ); ?></a>
-						<?php submit_button( __( 'Remove Created Users', 'bulk-create-users' ), 'delete', 'remove-created', false ); ?>
+						<a class="button button-primary" href="<?php echo add_query_arg( array( 'orderby' => 'id', 'order' => 'desc' ), self_admin_url( 'users.php' ) ); ?>"><?php esc_html_e( 'View Created Users', 'bulk-create-users' ); ?></a>
+						<?php submit_button( esc_html__( 'Remove Created Users', 'bulk-create-users' ), 'delete', 'remove-created', false ); ?>
 						<span class="spinner"></span>
 					</p>
 				</form>
@@ -818,12 +818,12 @@ final class Bulk_Create_Users {
 					if ( ! empty( $file_data ) ) : ?>
 
 				<div class="notice notice-info">
-					<p><?php printf( ( ! $is_single ? __( 'We found %1$d columns and %2$d rows in your file.', 'bulk-create-users' ) : __( 'We found 1 column and %2$d rows in your file', 'bulk-create-users' ) ),
+					<p><?php printf( ( ! $is_single ? esc_html__( 'We found %1$d columns and %2$d rows in your file.', 'bulk-create-users' ) : esc_html__( 'We found 1 column and %2$d rows in your file', 'bulk-create-users' ) ),
 						$column_count, $row_count + 1
 					); ?></p>
 				</div>
 
-				<h3><?php _e( 'Import Settings', 'bulk-create-users' ); ?></h3>
+				<h3><?php esc_html_e( 'Import Settings', 'bulk-create-users' ); ?></h3>
 
 				<p><?php _e( 'At least an <strong>email address</strong> is required to be able to setup your (new) users.', 'bulk-create-users' ); ?></p>
 
@@ -834,8 +834,8 @@ final class Bulk_Create_Users {
 					<table class="widefat striped fixed">
 						<thead>
 							<tr>
-								<th scope="col"><?php _e( 'File Column', 'bulk-create-users' ); ?></th>
-								<th scope="col"><?php _e( 'Data Field',  'bulk-create-users' ); ?></th>
+								<th scope="col"><?php esc_html_e( 'File Column', 'bulk-create-users' ); ?></th>
+								<th scope="col"><?php esc_html_e( 'Data Field',  'bulk-create-users' ); ?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -852,21 +852,21 @@ final class Bulk_Create_Users {
 					<table class="form-table">
 
 						<tr id="setting-first-row">
-							<th scope="row"><?php _e( 'First Row', 'bulk-create-users' ); ?></th>
+							<th scope="row"><?php esc_html_e( 'First Row', 'bulk-create-users' ); ?></th>
 							<td>
 								<input type="checkbox" name="first-row" value="1" id="first-row" />
 								<label for="first-row"><?php 
 									if ( $is_single ) :
-										_e( 'Exclude the first row from the import', 'bulk-create-users' );
+										esc_html_e( 'Exclude the first row from the import', 'bulk-create-users' );
 									else :
-										_e( 'Include the first row in the import',   'bulk-create-users' );
+										esc_html_e( 'Include the first row in the import',   'bulk-create-users' );
 									endif;
 								?></label>
 								<p class="description"><?php 
 									if ( $is_single ) :
-										_e( 'By default, the first column will be included in the import.',   'bulk-create-users' );
+										esc_html_e( 'By default, the first column will be included in the import.',   'bulk-create-users' );
 									else :
-										_e( 'By default, the first column will be excluded from the import.', 'bulk-create-users' );
+										esc_html_e( 'By default, the first column will be excluded from the import.', 'bulk-create-users' );
 									endif;
 								?></p>
 							</td>
@@ -874,24 +874,24 @@ final class Bulk_Create_Users {
 
 						<?php if ( ! $is_single ) : ?>
 						<tr id="setting-update-existing">
-							<th scope="row"><?php _e( 'Update Existing', 'bulk-create-users' ); ?></th>
+							<th scope="row"><?php esc_html_e( 'Update Existing', 'bulk-create-users' ); ?></th>
 							<td>
 								<input type="checkbox" name="update-existing" value="1" id="update-existing" />
-								<label for="update-existing"><?php _e( 'When the email address already exists, update the user', 'bulk-create-users' ); ?></label>
-								<p class="description"><?php _e( 'By default, existing users (email addresses) will be skipped.', 'bulk-create-users' ); ?></p>
+								<label for="update-existing"><?php esc_html_e( 'When the email address already exists, update the user', 'bulk-create-users' ); ?></label>
+								<p class="description"><?php esc_html_e( 'By default, existing users (email addresses) will be skipped.', 'bulk-create-users' ); ?></p>
 							</td>
 						</tr>
 						<?php endif; ?>
 
 						<?php if ( is_multisite() && ( $sites = wp_get_sites() ) && 1 < count( $sites ) ) : ?>
 						<tr id="setting-register-sites">
-							<th scope="row"><?php _e( 'Register to Sites', 'bulk-create-users' ); ?></th>
+							<th scope="row"><?php esc_html_e( 'Register to Sites', 'bulk-create-users' ); ?></th>
 							<td>
-								<p class="description"><?php _e( 'Select the sites for which to register the users. Defaults to the main site.', 'bulk-create-users' ); ?></p>
+								<p class="description"><?php esc_html_e( 'Select the sites for which to register the users. Defaults to the main site.', 'bulk-create-users' ); ?></p>
 								<ul>
 									<li>
 										<input type="checkbox" id="register-sites-toggle" onclick="toggle(this)" />
-										<label for="register-sites-toggle" style="color:#aaa;"><?php _e( 'Select/Deselect All', 'bulk-create-users' ); ?></label>
+										<label for="register-sites-toggle" style="color:#aaa;"><?php esc_html_e( 'Select/Deselect All', 'bulk-create-users' ); ?></label>
 										<script>
 											function toggle( s ) {
 												c = document.getElementsByName( 'register-sites[]' );
@@ -913,61 +913,61 @@ final class Bulk_Create_Users {
 						<?php endif; ?>
 
 						<tr id="setting-notification-email">
-							<th scope="row"><?php _e( 'Notify New Users', 'bulk-create-users' ); ?></th>
+							<th scope="row"><?php esc_html_e( 'Notify New Users', 'bulk-create-users' ); ?></th>
 							<td>
 								<input type="radio" name="notification-email" value="none" id="notification-email-none" checked="checked" />
-								<label for="notification-email-none"><?php _e( 'Do not send a notification email', 'bulk-create-users' ); ?></label><br/>
+								<label for="notification-email-none"><?php esc_html_e( 'Do not send a notification email', 'bulk-create-users' ); ?></label><br/>
 								<input type="radio" name="notification-email" value="default" id="notification-email-default" />
-								<label for="notification-email-default"><?php _e( 'Send the default WordPress notification emails', 'bulk-create-users' ); ?></label><br/>
+								<label for="notification-email-default"><?php esc_html_e( 'Send the default WordPress notification emails', 'bulk-create-users' ); ?></label><br/>
 								<input type="radio" name="notification-email" value="custom" id="notification-email-custom" />
-								<label for="notification-email-custom"><?php _e( 'Send a custom notification email', 'bulk-create-users' ); ?></label><br/>
+								<label for="notification-email-custom"><?php esc_html_e( 'Send a custom notification email', 'bulk-create-users' ); ?></label><br/>
 
 								<div id="notification-email-custom-settings">
-									<h4><?php _e( 'Custom Email Settings', 'bulk-create-users' ); ?></h4>
+									<h4><?php esc_html_e( 'Custom Email Settings', 'bulk-create-users' ); ?></h4>
 									<?php $settings = (object) wp_parse_args( get_site_option( 'bulk_create_users_custom_email', array() ), array(
 										'from'      => '',
 										'from_name' => '',
 
 										// Mimic wp_new_user_notification() subject and content
-										'subject'   => sprintf( __( '[%s] Your username and password' ), '%site_name%' ),
-										'content'   => sprintf( __( 'Username: %s' ), '###USERNAME###' ) . "\r\n" . sprintf( __( 'Password: %s' ), '###PASSWORD###' ) . "\r\n###LOGINURL###\r\n",
+										'subject'   => sprintf( esc_html__( '[%s] Your username and password' ), '%site_name%' ),
+										'content'   => sprintf( esc_html__( 'Username: %s' ), '###USERNAME###' ) . "\r\n" . sprintf( esc_html__( 'Password: %s' ), '###PASSWORD###' ) . "\r\n###LOGINURL###\r\n",
 										'redirect'  => ''
 									) ); ?>
 
 									<table class="form-table">
 										<tr>
-											<th><?php _e( 'From Name', 'bulk-create-users' ); ?></th>
+											<th><?php esc_html_e( 'From Name', 'bulk-create-users' ); ?></th>
 											<td>
 												<input type="text" class="regular-text" name="notification-email-custom[from_name]" value="<?php echo $settings->from_name; ?>" id="email-custom-from-name" />
-												<p class="description"><label for="email-custom-from-name"><?php _e( 'Define the name of the sender.', 'bulk-create-users' ); ?></label></p>
+												<p class="description"><label for="email-custom-from-name"><?php esc_html_e( 'Define the name of the sender.', 'bulk-create-users' ); ?></label></p>
 											</td>
 										</tr>
 										<tr>
-											<th><?php _e( 'From Address', 'bulk-create-users' ); ?></th>
+											<th><?php esc_html_e( 'From Address', 'bulk-create-users' ); ?></th>
 											<td>
 												<input type="email" class="regular-text" name="notification-email-custom[from]" value="<?php echo $settings->from; ?>" id="email-custom-from" />
-												<p class="description"><label for="email-custom-from"><?php _e( 'Define the email address of the sender.', 'bulk-create-users' ); ?></label></p>
+												<p class="description"><label for="email-custom-from"><?php esc_html_e( 'Define the email address of the sender.', 'bulk-create-users' ); ?></label></p>
 											</td>
 										</tr>
 										<tr>
-											<th><?php _e( 'Email Subject', 'bulk-create-users' ); ?></th>
+											<th><?php esc_html_e( 'Email Subject', 'bulk-create-users' ); ?></th>
 											<td>
 												<input type="text" class="regular-text" name="notification-email-custom[subject]" value="<?php echo $settings->subject; ?>" id="email-custom-subject" />
-												<p class="description"><label for="email-custom-subject"><?php _e( 'Define the subject of the notification email.', 'bulk-create-users' ); ?></label></p>
+												<p class="description"><label for="email-custom-subject"><?php esc_html_e( 'Define the subject of the notification email.', 'bulk-create-users' ); ?></label></p>
 											</td>
 										</tr>
 										<tr>
-											<th><?php _e( 'Email Content', 'bulk-create-users' ); ?></th>
+											<th><?php esc_html_e( 'Email Content', 'bulk-create-users' ); ?></th>
 											<td>
 												<p class="description"><label for="email-custom-content"><?php printf( __( 'Define the content of the notification email. Click <a href="%s">the help tab</a> to view the available variables (i.e. login, password).', 'bulk-create-users' ), '#' ); ?></label></p>
 												<?php wp_editor( $settings->content, 'email-custom-content', array( 'textarea_name' => 'notification-email-custom[content]', 'media_buttons' => false ) ); ?>
 											</td>
 										</tr>
 										<tr>
-											<th><?php _e( 'Login Redirect', 'bulk-create-users' ); ?></th>
+											<th><?php esc_html_e( 'Login Redirect', 'bulk-create-users' ); ?></th>
 											<td>
 												<input type="url" class="regular-text" name="notification-email-custom[redirect]" value="<?php echo $settings->redirect; ?>" id="email-custom-redirect" />
-												<p class="description"><label for="email-custom-redirect"><?php _e( 'When sending the login link: Define the url to which to redirect the user after login.', 'bulk-create-users' ); ?></label></p>
+												<p class="description"><label for="email-custom-redirect"><?php esc_html_e( 'When sending the login link: Define the url to which to redirect the user after login.', 'bulk-create-users' ); ?></label></p>
 											</td>
 										</tr>
 									</table>
@@ -993,7 +993,7 @@ final class Bulk_Create_Users {
 
 					<input type="hidden" name="step" value="import-uploaded-data" />
 					<?php // wp_nonce_field( 'bulk-create-users-import' ); ?>
-					<?php // submit_button( __( 'Import Users', 'bulk-create-users' ), 'primary', 'run-import', false ); ?>
+					<?php // submit_button( esc_html__( 'Import Users', 'bulk-create-users' ), 'primary', 'run-import', false ); ?>
 					<input type="button" name="submit" class="button-primary" value="<?php esc_attr_e( 'Import Users', 'bulk-create-users' ); ?>" onclick="bcuimporter_start();" />
 					<span class="spinner"></span>
 					<span class="feedback-message"></span>
@@ -1008,23 +1008,23 @@ final class Bulk_Create_Users {
 				 */
 				default : ?>
 
-				<h3><?php _e( 'Start Import', 'bulk-create-users' ); ?></h3>
+				<h3><?php esc_html_e( 'Start Import', 'bulk-create-users' ); ?></h3>
 
 				<form enctype="multipart/form-data" id="upload-form" class="wp-upload-form" method="post" action="">
 					<table class="form-table">
 						<tr>
-							<th scope="row"><?php _e( 'Select a CSV file', 'bulk-create-users' ); ?></th>
+							<th scope="row"><?php esc_html_e( 'Select a CSV file', 'bulk-create-users' ); ?></th>
 							<td><input type="file" name="file" id="upload" /></td>
 						</tr>
 						<tr>
-							<th scope="row"><?php _e( 'Separator', 'bulk-create-users' ); ?></th>
+							<th scope="row"><?php esc_html_e( 'Separator', 'bulk-create-users' ); ?></th>
 							<td><select name="sep"><option value=",">,</option><option value=";">;</option><option value="|">|</option></select></td>
 						</tr>
 					</table>
 
 					<input type="hidden" name="step" value="read-uploaded-file" />
 					<?php wp_nonce_field( 'bulk-create-users-read' ); ?>
-					<?php submit_button( __( 'Upload', 'bulk-create-users' ), 'primary', 'file-upload', false ); ?>
+					<?php submit_button( esc_html__( 'Upload', 'bulk-create-users' ), 'primary', 'file-upload', false ); ?>
 					<span class="spinner"></span>
 				</form>
 
@@ -1142,11 +1142,11 @@ final class Bulk_Create_Users {
 
 		// No data options 
 		if ( empty ( $options ) ) {
-			$opts = '<option>' . __( 'Nothing to select', 'bulk-create-users' ) . '</option>';
+			$opts = '<option>' . esc_html__( 'Nothing to select', 'bulk-create-users' ) . '</option>';
 		} else {
 
 			// Noselect option
-			$opts .= '<option value="">' . __( 'Select an option', 'bulk-create-users' ) . '</option>';
+			$opts .= '<option value="">' . esc_html__( 'Select an option', 'bulk-create-users' ) . '</option>';
 
 			foreach ( $options as $context => $details ) {
 				if ( empty( $details['options'] ) )
@@ -1252,19 +1252,19 @@ final class Bulk_Create_Users {
 		return array(
 			'info'    => apply_filters( 'bulk_create_users_info_messages', array() ),
 			'error'   => apply_filters( 'bulk_create_users_error_messages', array(
-				'no_file_found'               => __( 'Sorry, we could not find your file.', 'bulk-create-users' ),
-				'unreadable_file'             => __( 'Sorry, we could not read the uploaded file.', 'bulk-create-users' ),
-				'invalid_single_column'       => __( 'Sorry, we can only proces single column files if it contains email addresses.', 'bulk-create-users' ),
-				'invalid_data'                => __( 'Sorry, the data from your file is gone or invalid.', 'bulk-create-users' ),
-				'invalid_mapping'             => __( 'Sorry, the selected data options were incomplete or invalid.', 'bulk-create-users' ),
-				'missing_email_field'         => __( 'Sorry, but we need an email field to register or recognize the users with.', 'bulk-create-users' ),
-				'nothing_changed'             => __( 'Sorry, all users already exist.', 'bulk-create-users' ),
-				'custom_email_missing_fields' => __( 'Sorry, we did not find any settings for your custom email to be sent.', 'bulk-create-users' ),
+				'no_file_found'               => esc_html__( 'Sorry, we could not find your file.', 'bulk-create-users' ),
+				'unreadable_file'             => esc_html__( 'Sorry, we could not read the uploaded file.', 'bulk-create-users' ),
+				'invalid_single_column'       => esc_html__( 'Sorry, we can only proces single column files if it contains email addresses.', 'bulk-create-users' ),
+				'invalid_data'                => esc_html__( 'Sorry, the data from your file is gone or invalid.', 'bulk-create-users' ),
+				'invalid_mapping'             => esc_html__( 'Sorry, the selected data options were incomplete or invalid.', 'bulk-create-users' ),
+				'missing_email_field'         => esc_html__( 'Sorry, but we need an email field to register or recognize the users with.', 'bulk-create-users' ),
+				'nothing_changed'             => esc_html__( 'Sorry, all users already exist.', 'bulk-create-users' ),
+				'custom_email_missing_fields' => esc_html__( 'Sorry, we did not find any settings for your custom email to be sent.', 'bulk-create-users' ),
 			) ),
 			'success' => apply_filters( 'bulk_create_users_success_messages', array(
 				'created_users'               => _n_noop( 'Successfully created %d user: %s', 'Successfully created %d users: %s', 'bulk-create-users' ),
 				'updated_users'               => _n_noop( 'Successfully updated %d user: %s', 'Successfully updated %d users: %s', 'bulk-create-users' ),
-				'removed_users'               => __( 'Succesfully removed the recently created users from your installation.', 'bulk-create-users' ),
+				'removed_users'               => esc_html__( 'Succesfully removed the recently created users from your installation.', 'bulk-create-users' ),
 			) ),
 		);
 	}

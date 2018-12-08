@@ -71,7 +71,7 @@ final class Bulk_Create_Users_Buddypress {
 
 			// Append Member Types options
 			$fields['bp-member-types'] = array(
-				'label'   => __( 'Buddpress Member Types', 'bulk-create-users' ),
+				'label'   => esc_html__( 'Buddpress Member Types', 'bulk-create-users' ),
 				'options' => $options,
 			);
 		}
@@ -92,7 +92,7 @@ final class Bulk_Create_Users_Buddypress {
 
 			// Append XProfile options
 			$fields['bp-xprofile'] = array(
-				'label'   => __( 'Buddpress XProfile', 'bulk-create-users' ),
+				'label'   => esc_html__( 'Buddpress XProfile', 'bulk-create-users' ),
 				'options' => $options,
 			);
 		}
@@ -104,14 +104,14 @@ final class Bulk_Create_Users_Buddypress {
 			$groups  = groups_get_groups( array( 'show_hidden' => true, 'type' => 'alphabetical', 'populate_extras' => false ) );
 
 			// Setup options array
-			$options = array( 0 => __( 'Group Slugs', 'bulk-create-users' ) );
+			$options = array( 0 => esc_html__( 'Group Slugs', 'bulk-create-users' ) );
 			foreach ( $groups['groups'] as $group ) {
 				$options[ $group->id ] = $group->name;
 			}
 
 			// Append Groups options
 			$fields['bp-groups'] = array(
-				'label'   => __( 'Buddypress Goups', 'bulk-create-users' ),
+				'label'   => esc_html__( 'Buddypress Goups', 'bulk-create-users' ),
 				'options' => $options,
 			);
 		}

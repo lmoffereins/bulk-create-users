@@ -87,26 +87,26 @@ function bulk_create_users_data_fields() {
 
 		// Context: Base user data handled by wp_update_user()
 		'users' => array(
-			'label'   => __( 'Base Data', 'bulk-create-users' ),
+			'label'   => esc_html__( 'Base Data', 'bulk-create-users' ),
 			'options' => array(
-				'user_email'      => __( 'Email Address', 'bulk-create-users' ) . '*', // Key
-				'user_login'      => __( 'Login',         'bulk-create-users' ),
-				'user_pass'       => __( 'Password',      'bulk-create-users' ),
-				'user_nicename'   => __( 'Nicename',      'bulk-create-users' ),
-				'user_url'        => __( 'Website',       'bulk-create-users' ),
-				'first_name'      => __( 'First Name',    'bulk-create-users' ),
-				'last_name'       => __( 'Last Name',     'bulk-create-users' ),
-				'display_name'    => __( 'Display Name',  'bulk-create-users' ),
-				'nickname'        => __( 'Nickname',      'bulk-create-users' ),
-				'description'     => __( 'Description',   'bulk-create-users' ),
+				'user_email'      => esc_html__( 'Email Address', 'bulk-create-users' ) . '*', // Key
+				'user_login'      => esc_html__( 'Login',         'bulk-create-users' ),
+				'user_pass'       => esc_html__( 'Password',      'bulk-create-users' ),
+				'user_nicename'   => esc_html__( 'Nicename',      'bulk-create-users' ),
+				'user_url'        => esc_html__( 'Website',       'bulk-create-users' ),
+				'first_name'      => esc_html__( 'First Name',    'bulk-create-users' ),
+				'last_name'       => esc_html__( 'Last Name',     'bulk-create-users' ),
+				'display_name'    => esc_html__( 'Display Name',  'bulk-create-users' ),
+				'nickname'        => esc_html__( 'Nickname',      'bulk-create-users' ),
+				'description'     => esc_html__( 'Description',   'bulk-create-users' ),
 			)
 		),
 
 		// Context: User meta fields
 		'usermeta' => array(
-			'label'   => __( 'User Meta', 'bulk-create-users' ),
+			'label'   => esc_html__( 'User Meta', 'bulk-create-users' ),
 			'options' => array(
-				'usermeta'        => __( 'Use column title as meta key', 'bulk-create-users' ),
+				'usermeta'        => esc_html__( 'Use column title as meta key', 'bulk-create-users' ),
 			)
 		),
 	) );
