@@ -13,7 +13,7 @@
  * Plugin Name:       Bulk Create Users
  * Description:       Create, import or update multiple users at once
  * Plugin URI:        https://github.com/lmoffereins/bulk-create-users/
- * Version:           1.2.0
+ * Version:           1.3.0
  * Author:            Laurens Offereins
  * Author URI:        https://github.com/lmoffereins/
  * Text Domain:       bulk-create-users
@@ -70,7 +70,7 @@ final class Bulk_Create_Users {
 
 		/** Versions **********************************************************/
 
-		$this->version      = '1.2.0';
+		$this->version      = '1.3.0';
 		$this->db_version   = 20180928;
 
 		/** Paths *************************************************************/
