@@ -11,7 +11,7 @@
 
 /**
  * Plugin Name:       Bulk Create Users
- * Description:       Create/import/update multiple users at once 
+ * Description:       Create, import or update multiple users at once
  * Plugin URI:        https://github.com/lmoffereins/bulk-create-users/
  * Version:           1.2.0
  * Author:            Laurens Offereins

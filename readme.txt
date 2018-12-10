@@ -7,7 +7,7 @@ Stable tag: 1.2.0
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Create multiple users at once
+Create, import or update multiple users at once
 
 == Description ==
 
@@ -26,6 +26,9 @@ This plugin has various filters to extend its use and add support for other user
 This plugin has out of the box support for Buddypress Member Types, XProfile fields and User Groups. Requires at least BuddyPress 2.3.
 
 == Changelog ==
+
+= 1.3.0 =
+* Added option to define a data column's separator for importing multiple values
 
 = 1.2.0 =
 * Moved to ajaxified import procedure

@@ -1,12 +1,12 @@
 # Bulk Create Users #
 
-Create multiple users at once
+Create, import or update multiple users at once
 
 ## Description ##
 
 > This WordPress plugin requires at least [WordPress](https://wordpress.org) 4.0.
 
-Upload a CSV file, set the corresponding user data fields and other import settings, and create/update your users! 
+Upload a CSV file, set the corresponding user data fields and other import settings, and create/update your users.
 This plugin runs on both single site and multisite installations, under Admin > Users.
 
 The default import settings contain:

@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Econozel Updater
+ * Bulk Create Users Updater
  *
- * @package Econozel
+ * @package Bulk Create Users
  * @subpackage Updater
  */
 
